@@ -1,0 +1,135 @@
+<template>
+<div class="bag">
+  <ul>
+    <li v-for="(item, index) in baglist" :key="index">
+      <div class="img">
+        <img :src="item.img">
+      </div>
+      <div class="right">
+        <div class="name">{{item.name}}</div>
+        <div class="bottom">
+          <el-input-number :min=0 size="mini" v-model="item.count"></el-input-number>
+          <span class="price">${{item.price}}</span>
+        </div>
+      </div>
+    </li>
+  </ul>
+  <div class="total">
+    <div class="top">
+      <span class="acounts">{{total.counts}} ITEMS</span>
+      <span class="subtotal">SUBTOTAL ${{total.subtotal}}</span>
+    </div>
+    <div class="sellInfo">
+      $12 away from free standard shipping!
+    </div>
+  </div>
+  <div class="operating">
+    <el-button size="mini" @click="viewCart">VIEW CART</el-button>
+    <el-button size="mini" class="checkout" @click="checkout">CHECKOUT</el-button>
+  </div>
+</div>
+</template>
+<script>
+export default {
+  data () {
+    return {
+      baglist: [
+        { img: '/static/images/bag/product.png', name: 'PRODUCT NAME BALABALABALABALABALA BALABALA', count: 1, price: 30 },
+        { img: '/static/images/bag/product.png', name: 'PRODUCT NAME BALABALABALABALABALA BALABALA', count: 2, price: 30 },
+        { img: '/static/images/bag/product.png', name: 'PRODUCT NAME BALABALABALABALABALA BALABALA', count: 3, price: 30 },
+        { img: '/static/images/bag/product.png', name: 'PRODUCT NAME BALABALABALABALABALA BALABALA', count: 4, price: 30 }
+      ]
+    }
+  },
+  computed: {
+    total () {
+      let total = { counts: 0, subtotal: 0 }
+      this.baglist.forEach(_ => {
+        total.counts += _.count
+        total.subtotal += _.price * _.count
+      })
+      return total
+    }
+  },
+  methods: {
+    viewCart () {
+      console.log('viewCart')
+    },
+    checkout () {
+      console.log('checkout')
+    }
+  }
+}
+</script>
+
+<style lang="less" scoped>
+  .bag {
+    margin: 20px 20px 10px 0;
+    >ul{
+      border-bottom: 1px solid #d2d2d2;
+      >li {
+        font-weight: 500;
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 20px;
+        .right {
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+          padding-bottom: 5px;
+          .bottom {
+            display: flex;
+            justify-content: space-between;
+            .price {
+              font-size: 24px;
+              font-weight:500;
+              line-height: 28px;
+              color:#de9d37;
+            }
+          }
+        }
+      }
+    }
+    .total {
+      .top {
+        line-height: 54px;
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: space-between;
+        font-weight: 600;
+      }
+    }
+  }
+</style>
+<style lang="less">
+.bag {
+  .el-input__inner {
+    border-radius: 0;
+    border-color: #aeaeae;
+  }
+  .el-input-number__decrease, .el-input-number__increase {
+    background-color: #efefef;
+    border-radius: 0;
+  }
+  .el-input-number {
+    width: 98px;
+  }
+  .operating {
+    margin-top: 22px;
+    display: flex;
+    justify-content:flex-end;
+    .el-button--mini {
+      border-radius: 0;
+      color: #151515;
+      font-size: 14px;
+      border-color: #151515;
+      background-color: #fff;
+      width: 126px;
+      &.checkout {
+        background-color: #000;
+        color: #fff;
+      }
+    }
+  }
+}
+</style>

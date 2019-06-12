@@ -6,10 +6,9 @@
     <div class="hot">
       <h3 class="title">BEST SELLER</h3>
       <div class="main">
-        <div class="list">
-          <el-row :gutter="20">
-            <el-col :lg="8" :xl="8" :md="12" :sm="24" v-for="(pro, index) in hots" :key="index"
-                    :class="{'hidden-md-and-down':index === 2, 'hidden-sm-and-down': index === 1}">
+        <div class="list" @touchstart="hts" @touchmove="htm" @touchend="hte">
+          <el-row :gutter="20" ref="hotContainer">
+            <el-col :lg="8" :xl="8" :md="8" :sm="12" :xm='24' v-for="(pro, index) in hots" :key="index">
               <div class="item">
                 <div class="img">
                   <img :src="(pro.colors[pro.hoverIndex] || pro.colors[pro.activeIndex]).img">
@@ -21,7 +20,8 @@
                 <div class="colorPicker" v-if="pro.colors.length > 1">
                   <i :class="['el-icon-arrow-left',pro.activeIndex === 0 ? 'disabled' : '' ]" :style="{visibility: pro.colors.length > 5 ? '' : 'hidden'}" @click="pre(pro)"></i>
                   <ul class="dot">
-                    <li v-for="(item, ind) in pro.colors" :key="ind" :style="{backgroundColor: item.color}"
+                    <li v-for="(item, ind) in pro.colors" :key="ind"
+                    :style="{backgroundColor: item.color, transform:'translateX(-'+ (160 * (pro.activeIndex > 4 ? pro.activeIndex - 4 : 0))+'%)'}"
                     :class="{active: ind === pro.activeIndex || ind === pro.hoverIndex}"
                     @click="pro.activeIndex = ind" @mouseenter="pro.hoverIndex = ind" @mouseleave="pro.hoverIndex = -1"></li>
                   </ul>
@@ -36,57 +36,246 @@
         </div>
       </div>
     </div>
+    <div class="prodotti">
+      <h3 class="title">PRODOTTI</h3>
+      <div class="main">
+        <ul @touchstart="pts" @touchmove="ptm" @touchend="pte" ref="pul">
+          <li v-for="(item, index) in prodottis" :key="index" :class="{thrid: index ===2, fouth: index === 3}">
+            <img :src="item.img">
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="serv">
+      <div class="main">
+        <div class="content">
+          <ul @touchstart="sts" @touchmove="stm" @touchend="ste" ref="sul">
+            <li v-for="(item, index) in servicelist" :key="index">
+              <div class="img">
+                <img :src="item.img">
+              </div>
+              <div class="word"><p>{{item.info}}</p></div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="aboutus">
+      <div class="main">
+        <div class="word">
+          <div class="title">ABOUT US</div>
+          <div class="content">{{content}}</div>
+        </div>
+        <div class="pic"></div>
+      </div>
+    </div>
+    <div class="ins">
+      <div class="main">
+         <div class="content">
+            <ul @touchstart="its" @touchmove="itm" @touchend="ite" ref="iul">
+              <li v-for="(item, index) in insList" :key="index">
+                <div class="img">
+                  <img :src="item.img">
+                  <div class="info">
+                    <div class="name">@{{item.name}}</div>
+                    <div class="msg">{{item.msg}}</div>
+                  </div>
+                </div>
+              </li>
+            </ul>
+         </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-
 export default {
-  data() {
+  data () {
+    window._this = this
     return {
-      hots :[
-        { 
+      hots: [
+        {
           hoverIndex: -1,
           activeIndex: 0,
-          colors:[
-            {code: '132#', color: 'rgb(239, 207, 175)', price: 126, img:'/static/images/main/product2.png',name: 'PRODUCT NAME SECOND LINE'},
-            {code: '192#', color: 'rgb(229, 188, 146)', price: 162, img:'/static/images/main/product2.png',name: 'PRODUCT NAME'},
-            {code: '178#', color: 'rgb(214, 160, 117)', price: 126, img:'/static/images/main/product3.png',name: 'PRODUCT NAME SECOND LINE'},
-            {code: '180#', color: 'rgb(215, 167, 112)', price: 163, img:'/static/images/main/product1.png',name: 'PRODUCT NAME'},
-            {code: '290#', color: 'rgb(222, 190, 151)', price: 126, img:'/static/images/main/product3.png',name: 'PRODUCT NAME'},
-            {code: '422#', color: 'rgb(234, 196, 159)', price: 146, img:'/static/images/main/product1.png',name: 'PRODUCT NAME SECOND LINE'},
-            {code: '105#', color: 'rgb(232, 188, 164)', price: 126, img:'/static/images/main/product2.png',name: 'PRODUCT NAME'},
-            {code: '181#', color: 'rgb(236, 195, 161)', price: 166, img:'/static/images/main/product1.png',name: 'PRODUCT NAME'},
-            {code: '272#', color: 'rgb(226, 185, 150)', price: 167, img:'/static/images/main/product2.png',name: 'PRODUCT NAME SECOND LINE'},
-            {code: '374#', color: 'rgb(210, 158, 123)', price: 168, img:'/static/images/main/product3.png',name: 'PRODUCT NAME SECOND LINE'}
+          colors: [
+            { code: '132#', color: 'rgb(239, 207, 175)', price: 126, img: '/static/images/main/product2.png', name: 'PRODUCT NAME SECOND LINE' },
+            { code: '192#', color: 'rgb(229, 188, 146)', price: 162, img: '/static/images/main/product1.png', name: 'PRODUCT NAME' },
+            { code: '178#', color: 'rgb(214, 160, 117)', price: 127, img: '/static/images/main/product3.png', name: 'PRODUCT NAME SECOND LINE' },
+            { code: '180#', color: 'rgb(215, 167, 112)', price: 163, img: '/static/images/main/product1.png', name: 'PRODUCT NAME' },
+            { code: '290#', color: 'rgb(222, 190, 151)', price: 126, img: '/static/images/main/product3.png', name: 'PRODUCT NAME' },
+            { code: '422#', color: 'rgb(234, 196, 159)', price: 146, img: '/static/images/main/product1.png', name: 'PRODUCT NAME SECOND LINE' },
+            { code: '105#', color: 'rgb(232, 188, 164)', price: 126, img: '/static/images/main/product2.png', name: 'PRODUCT NAME' },
+            { code: '181#', color: 'rgb(236, 195, 161)', price: 166, img: '/static/images/main/product1.png', name: 'PRODUCT NAME' },
+            { code: '272#', color: 'rgb(226, 185, 150)', price: 167, img: '/static/images/main/product2.png', name: 'PRODUCT NAME SECOND LINE' },
+            { code: '374#', color: 'rgb(210, 158, 123)', price: 168, img: '/static/images/main/product3.png', name: 'PRODUCT NAME SECOND LINE' }
           ]
         },
-        { 
+        {
           hoverIndex: -1,
           activeIndex: 0,
-          colors:[
-            {code: '132#', color: 'rgb(239, 207, 175)', price: 136, img:'/static/images/main/product1.png',name: 'PRODUCT NAME'},
-            {code: '192#', color: 'rgb(229, 188, 146)', price: 162, img:'/static/images/main/product2.png',name: 'PRODUCT NAME'},
-            {code: '178#', color: 'rgb(214, 160, 117)', price: 126, img:'/static/images/main/product3.png',name: 'PRODUCT NAME SECOND LINE'},
-            {code: '180#', color: 'rgb(215, 167, 112)', price: 163, img:'/static/images/main/product1.png',name: 'PRODUCT NAME'}
+          colors: [
+            { code: '132#', color: 'rgb(239, 207, 175)', price: 136, img: '/static/images/main/product1.png', name: 'PRODUCT NAME' },
+            { code: '192#', color: 'rgb(229, 188, 146)', price: 162, img: '/static/images/main/product2.png', name: 'PRODUCT NAME' },
+            { code: '178#', color: 'rgb(214, 160, 117)', price: 126, img: '/static/images/main/product3.png', name: 'PRODUCT NAME SECOND LINE' },
+            { code: '180#', color: 'rgb(215, 167, 112)', price: 163, img: '/static/images/main/product1.png', name: 'PRODUCT NAME' }
           ]
         },
-        { 
+        {
           hoverIndex: -1,
           activeIndex: 0,
-          colors:[
-            {code: '132#', color: 'rgb(239, 207, 175)', price: 188, img:'/static/images/main/product3.png',name: 'PRODUCT NAME SECOND LINE'}
+          colors: [
+            { code: '132#', color: 'rgb(239, 207, 175)', price: 188, img: '/static/images/main/product3.png', name: 'PRODUCT NAME SECOND LINE' }
           ]
         }
-      ]
+      ],
+      tranSteps: 0,
+      prodottis: [
+        { img: '/static/images/main/product3.png', info: 'PRODUCT NAME SECOND LINE' },
+        { img: '/static/images/main/product3.png', info: 'PRODUCT NAME SECOND LINE' },
+        { img: '/static/images/main/product3.png', info: 'PRODUCT NAME SECOND LINE' },
+        { img: '/static/images/main/product3.png', info: 'PRODUCT NAME SECOND LINE' }
+      ],
+      pTranSteps: 0,
+      servicelist: [
+        { img: '/static/images/main/service2.png', info: 'CRUELTY FREE' },
+        { img: '/static/images/main/service1.png', info: 'MADE IN ITALY' },
+        { img: '/static/images/main/service2.png', info: 'MADE IN ITALY' },
+        { img: '/static/images/main/service1.png', info: 'CRUELTY FREE' }
+      ],
+      content: `TUR ADIPIS ELIT, SED DO EIUSMOD TEMPOR INCIDIDUNT UT LABORE ET DOLORE MALIQUA. UTENIM AD MINIM VENIAM, QUIS MOSTRUD EXERCITATION ULLAMCO LABORIS
+        ALIQUIP EX EA COMMODO CONSEQUAT. DUIS AUTE IRURE DOLOR IN REPREHENDERIT I PTATE VELIT ESSE CILLUM DOLORE EU FUGIAT NULLA PARIATUR. EXCEPTEUR SINT OCC
+        CUPIDATAT NON PROIDENT, SUNT IN CULPA QUI OFFICIA DESERUNT MOLLIT ANIM ID E ORUM. "UUAMCO LABORIS NISI UT ALIQUIP EX EA COMMODO CONSEQUAT. DUIS AUTE
+        AMCO LABORIS NISI UT ALIQUIP EA COMMODO CONSEQUAT.DUIS `,
+      insList: [
+        { img: '/static/images/main/ins1.png', info: 'PRODUCT NAME SECOND LINE', name: 'Katebabie', msg: 'I Love cosmi.Yesterday I went to a party.All of my friends love my rouge' },
+        { img: '/static/images/main/ins2.png', info: 'PRODUCT NAME SECOND LINE', name: 'Kate', msg: 'I Love cosmi.Yesterday I went to a party.All of my friends love my rouge' },
+        { img: '/static/images/main/ins1.png', info: 'PRODUCT NAME SECOND LINE', name: 'Katebabie', msg: 'I Love cosmi.Yesterday I went to a party.All of my friends love my rouge' },
+        { img: '/static/images/main/ins2.png', info: 'PRODUCT NAME SECOND LINE', name: 'Kate', msg: 'I Love cosmi.Yesterday I went to a party.All of my friends love my rouge' }
+      ],
+      sTranSteps: 0,
+      iTranSteps: 0
     }
   },
   methods: {
-    pre(pro) {
+    pre (pro) {
       if (pro.activeIndex > 0) pro.activeIndex -= 1
     },
-    next(pro) {
+    next (pro) {
       if (pro.colors.length - 1 > pro.activeIndex) pro.activeIndex += 1
+    },
+    hts (e) {
+      this.screenWidth = document.body.scrollWidth
+      if (this.screenWidth >= 992) return
+      this.itemWidth = this.$refs.hotContainer.$children[0].$el.offsetWidth
+      this.startX = e.changedTouches[0].screenX
+      this.$refs.hotContainer.$children.forEach(_ => _.$el.classList.remove('tran'))
+    },
+    htm (e) {
+      if (this.screenWidth >= 992) return
+      const moveX = e.changedTouches[0].screenX - this.startX
+      const translateX = moveX + this.tranSteps * this.itemWidth
+      this.$refs.hotContainer.$children.forEach(_ => (_.$el.style.transform = 'translateX(' + translateX + 'px)'))
+    },
+    hte (e) {
+      if (this.screenWidth >= 992) return
+      const moveX = e.changedTouches[0].screenX - this.startX
+      let step = moveX / this.itemWidth
+      if (Math.abs(step) > 0.3) {
+        step = step > 0 ? Math.ceil(step) : Math.floor(step)
+        this.tranSteps += step
+        if (this.screenWidth >= 768) {
+          this.tranSteps = this.tranSteps <= -1 ? -1 : 0
+        } else {
+          this.tranSteps = this.tranSteps <= -2 ? -2 : this.tranSteps <= -1 ? -1 : 0
+        }
+      }
+      this.$refs.hotContainer.$children.forEach(_ => {
+        _.$el.classList.add('tran')
+        _.$el.style.transform = 'translateX(' + this.tranSteps * this.itemWidth + 'px)'
+      })
+    },
+    pts (e) {
+      this.screenWidth = document.body.scrollWidth >= 768
+      if (this.screenWidth) return
+      this.style = this.$refs.pul.style
+      this.itemWidth = this.$refs.pul.parentElement.offsetWidth
+      this.startX = e.changedTouches[0].screenX
+      this.$refs.pul.classList.remove('tran')
+    },
+    ptm (e) {
+      if (this.screenWidth) return
+      const moveX = e.changedTouches[0].screenX - this.startX
+      const translateX = moveX + this.pTranSteps * this.itemWidth
+      this.style.transform = 'translateX(' + translateX + 'px)'
+    },
+    pte (e) {
+      if (this.screenWidth) return
+      const moveX = e.changedTouches[0].screenX - this.startX
+      let step = moveX / this.itemWidth
+      this.$refs.pul.classList.add('tran')
+      if (Math.abs(step) > 0.3) {
+        step = step > 0 ? Math.ceil(step) : Math.floor(step)
+        this.pTranSteps += step
+        this.pTranSteps = this.pTranSteps >= 0 ? 0 : this.pTranSteps <= -3 ? -3 : this.pTranSteps
+      }
+      this.style.transform = 'translateX(' + this.pTranSteps * this.itemWidth + 'px)'
+    },
+    sts (e) {
+      this.screenWidth = document.body.scrollWidth >= 992
+      if (this.screenWidth) return
+      this.style = this.$refs.sul.style
+      this.itemWidth = this.$refs.sul.parentElement.offsetWidth
+      this.startX = e.changedTouches[0].screenX
+      this.$refs.sul.classList.remove('tran')
+    },
+    stm (e) {
+      if (this.screenWidth) return
+      const moveX = e.changedTouches[0].screenX - this.startX
+      const translateX = moveX + this.sTranSteps * this.itemWidth
+      this.style.transform = 'translateX(' + translateX + 'px)'
+    },
+    ste (e) {
+      if (this.screenWidth) return
+      const moveX = e.changedTouches[0].screenX - this.startX
+      let step = moveX / this.itemWidth
+      this.$refs.sul.classList.add('tran')
+      if (Math.abs(step) > 0.3) {
+        step = step > 0 ? Math.ceil(step) : Math.floor(step)
+        this.sTranSteps += step
+        this.sTranSteps = this.sTranSteps >= 0 ? 0 : -1
+      }
+      this.style.transform = 'translateX(' + this.sTranSteps * this.itemWidth + 'px)'
+    },
+    its (e) {
+      this.screenWidth = document.body.scrollWidth >= 992
+      if (this.screenWidth) return
+      this.style = this.$refs.iul.style
+      this.itemWidth = this.$refs.iul.parentElement.offsetWidth
+      this.startX = e.changedTouches[0].screenX
+      this.$refs.iul.classList.remove('tran')
+    },
+    itm (e) {
+      if (this.screenWidth) return
+      const moveX = e.changedTouches[0].screenX - this.startX
+      const translateX = moveX + this.iTranSteps * this.itemWidth
+      this.style.transform = 'translateX(' + translateX + 'px)'
+    },
+    ite (e) {
+      if (this.screenWidth) return
+      const moveX = e.changedTouches[0].screenX - this.startX
+      let step = moveX / this.itemWidth
+      this.$refs.iul.classList.add('tran')
+      if (Math.abs(step) > 0.3) {
+        step = step > 0 ? Math.ceil(step) : Math.floor(step)
+        this.iTranSteps += step
+        if (document.body.scrollWidth >= 768) {
+          this.iTranSteps = this.iTranSteps >= 0 ? 0 : -1
+        } else {
+          this.iTranSteps = this.iTranSteps >= 0 ? 0 : this.iTranSteps <= -3 ? -3 : this.iTranSteps
+        }
+      }
+      this.style.transform = 'translateX(' + this.iTranSteps * this.itemWidth + 'px)'
     }
   }
 }
@@ -101,118 +290,328 @@ export default {
   }
   .hot {
     text-align: center;
+    .list {
+      margin-top: 45px;
+      height: 590px;
+      .img {
+        display: inline-block;
+        width: 300px;
+        height: 300px;
+        margin: 16px 0 11px 0;
+      }
+      .name {
+        display:table;
+        height: 52px;
+        font-size: 1.6em;
+        width: 132px;
+        margin: 0 auto;
+        p {
+          display:table-cell;
+          vertical-align:middle;
+          line-height: 26px;
+        }
+      }
+      .color {
+        height: 26px;
+        line-height: 26px;
+        font-size: 1.4em;
+      }
+      .item {
+        height: 554px;
+        border-radius: 30px;
+        max-width: 400px;
+        margin: 0 auto;
+        &:hover {
+          box-shadow: 0px 0px 10px 2px rgba(0, 0, 0, 0.1);
+        }
+      }
+      .colorPicker {
+        width: 198px;
+        margin: 5px auto 7px;
+        height: 32px;
+        line-height: 22px;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        >i {
+          line-height: 32px;
+          font-size: 1.8em;
+          color: #000;
+          cursor: pointer;
+          &.disabled {
+            color: #afafaf;
+            cursor: not-allowed;
+          }
+        }
+        ul {
+          height: 32px;
+          max-width: 162px;
+          display: flex;
+          flex-flow: row nowrap;
+          justify-content: space-between;
+          align-items: center;
+          overflow: hidden;
+        }
+        li {
+          width: 20px;
+          height: 20px;
+          margin: 0 6px;
+          transition: transform .3s;
+          border-radius: 50%;
+          flex-shrink: 0;
+          cursor: pointer;
+          &.active {
+            box-shadow: 0 0 0px 1px #060606;
+          }
+        }
+      }
+      .price {
+        margin: 0 auto;
+        height: 36px;
+        font-size: 1.6em;
+        line-height: 36px;
+      }
+      .add {
+        height: 40px;
+        width: 168px;
+        font-size: 1.6em;
+        background-color: rgb(35,35,35);
+        color: #fff;
+        border-radius: 0px;
+      }
+      .new {
+        height: 52px;
+        width: 300px;
+        margin: 16px auto 2px;
+        display:table;
+        font-size: 1.6em;
+        color: #f02655;
+        p {
+          display:table-cell;
+          vertical-align:middle;
+          line-height: 26px;
+        }
+      }
+    }
   }
   .title {
     display: inline-block;
-    font-size: 5.2em;
+    font-size: 4.2em;
     font-family: caviar dreams;
-    height: 94px;
-    line-height: 94px;
+    height: 84px;
+    line-height: 84px;
     color: #000;
     box-sizing: border-box;
     border-bottom: 3px solid #000;
   }
-  .list {
-    margin-top: 20px;
-    height: 590px;
-    padding: 10px;
-    color: #151515;
-    .img {
-      display: inline-block;
-      width: 300px;
-      height: 300px;
-      margin: 16px 0 11px 0;
-    }
-    .name {
-      display:table;
-      height: 52px;
-      font-size: 1.6em;
-      width: 132px;
-      margin: 0 auto;
-      p {
-        display:table-cell;
-        vertical-align:middle;
-        line-height: 26px;
-      }
-    }
-    .color {
-      height: 26px;
-      line-height: 26px;
-      font-size: 1.4em;
-    }
-    .item {
-      height: 554px;
-      border-radius: 30px;
-      max-width: 400px;
-      margin: 0 auto;
-      box-shadow: 0px 0px 10px 2px rgba(0, 0, 0, 0.1);
-    }
-    .colorPicker {
-      width: 198px;
-      margin: 5px auto 7px;
-      height: 32px;
-      line-height: 22px;
-      display: flex;
-      flex-direction: row;
-      justify-content: space-between;
-      >i {
-        line-height: 32px;
-        font-size: 1.8em;
-        color: #000;
-        cursor: pointer;
-        &.disabled {
-          color: #afafaf;
-          cursor: not-allowed;
-        }
-      }
-      ul {
-        height: 32px;
-        max-width: 162px;
-        display: flex;
-        flex-flow: row nowrap;
-        justify-content: space-between;        
-        align-items: center;
-        overflow: hidden;
-      }
-      li {
-        width: 20px;
-        height: 20px;
-        margin: 0 6px;
-        border-radius: 50%;
-        flex-shrink: 0;
-        cursor: pointer;
-        &.active {
-          box-shadow: 0 0 0px 1px #060606;
-        }
-      }
-    }
-    .price {
-      margin: 0 auto;
-      height: 36px;
-      font-size: 1.6em;
-      line-height: 36px;
-    }
-    .add {
-      height: 40px;
-      width: 168px;
-      font-size: 1.6em;
-      background-color: rgb(35,35,35);
+  .prodotti {
+    padding-top: 19px;
+    background-color: #000;
+    text-align: center;
+    .title {
       color: #fff;
-      border-radius: 0px;
+      border-color: #fff;
+      margin-bottom: 30px;
     }
-    .new {
-      height: 52px;
-      width: 300px;
-      margin: 16px auto 2px;
-      display:table;
-      font-size: 1.6em;
-      color: #f02655;
-      p {
-        display:table-cell;
-        vertical-align:middle;
-        line-height: 26px;
+    .main {
+      overflow: hidden;
+      ul {
+        display: flex;
+        flex-flow: row wrap;
+        justify-content: space-around;
+        align-content: space-around;
+        align-items:center;
+        height: 660px;
+        margin-bottom: 6px;
+        >li {
+          width: calc(33.3333333% - 20px);
+          height: 300px;
+          overflow: hidden;
+          flex-shrink: 0;
+          display: flex;
+          align-items:center;
+          justify-content:center;
+          text-align:center;
+          img {
+            width: 100%;
+          }
+          &.fouth {
+            width: calc(100% - 20px);
+          }
+        }
+      }
+      @media only screen and (max-width: 991px) {
+        ul>li {
+          width: calc(50% - 20px) !important;
+        }
+      }
+      @media only screen and (max-width: 767px) {
+        ul {
+          flex-wrap: nowrap;
+          height: 330px;
+          justify-content:flex-start;
+          >li {
+            margin: 0 10px;
+            width: calc(100% - 20px) !important;
+          }
+        }
+      }
+    }
+  }
+  .serv {
+    .content {
+      width: 600px;
+      overflow: hidden;
+      margin: 41px auto 36px;
+    }
+    @media only screen and (max-width: 991px) {
+      .content {
+        width: 300px;
+      }
+    }
+    ul {
+      padding: 14px 0;
+      display: flex;
+      flex-flow: row nowrap;
+      justify-content: space-around;
+      width: 600px;
+      >li {
+        width: 116px;
+        height: 116px;
+      }
+      .img {
+        height: 66px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .word {
+        height: 40px;
+        padding: 0 25px;
+        font-size: 1.4em;
+        line-height: 20px;
+        text-align: center;
+        display: table;
+        >p {
+          display: table-cell;
+          vertical-align: middle
+        }
+      }
+    }
+  }
+  .aboutus {
+    background-color: #363636;
+    color: #fff;
+    padding: 45px 10px;
+    .main {
+      display: flex;
+      justify-content: space-between;
+    }
+    .word {
+      width: 638px;
+      margin-right: 20px;
+      .title {
+        margin-top: 67px;
+        color: #fff;
+        border-color: #fff;
+      }
+      .content {
+        margin: 60px 0;
+        font-size: 1.4em;
+        line-height: 3.4em;
+        font-family: AVENIR-OBLIQUE;
+        text-align: justify;
+      }
+    }
+    .pic {
+      width: 500px;
+      height: 570px;
+      background-image: url(../assets/images/main/aboutus.png);
+      @media only screen and (max-width: 767px) {
+        display: none;
+      }
+    }
+    @media only screen and (max-width: 991px) {
+      .main {
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      .word {
+        margin-right: 0;
+      }
+    }
+  }
+  .ins {
+    .main {
+      overflow: hidden;
+    }
+    ul {
+      height: 340px;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      @media only screen and (max-width: 991px) {
+        width: 200%;
+      }
+      @media only screen and (max-width: 767px) {
+        width: 400%;
+      }
+      >li {
+        cursor: pointer;
+        width: calc(25% - 20px);
+        height: 280px;
+        display: flex;
+        overflow: hidden;
+        justify-content: center;
+        align-items: center;
+      }
+      .img {
+        position: relative;
+        .info {
+          transition: all .3s;
+          opacity: 0;
+          position: absolute;
+          top: 0;
+          left: 0;
+          font-size: 1.4em;
+          height: 100%;
+          color: #fff;
+          background-color:rgba(0, 0, 0, 0.3);
+          padding: 0 45px 0 35px;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          &:hover {
+            opacity: 1;
+          }
+          .name {
+            width: 100%;
+            margin-bottom: 20px;
+            line-height: 24px;
+          }
+          .msg {
+            width: 100%;
+          }
+        }
       }
     }
   }
 }
+</style>
+<style lang="less">
+  .container {
+    .tran {
+      transition: all 0.5s;
+    }
+    .list .el-row {
+      overflow: hidden;
+      padding: 5px 0;
+      display: flex;
+      margin-left: 0 !important;
+      margin-right: 0 !important;
+      >.el-col {
+        flex-shrink: 0;
+      }
+    }
+  }
 </style>

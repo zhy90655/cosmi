@@ -11,12 +11,24 @@
           :trigger-on-focus="false"
           @select="handleSelect"
         ></el-autocomplete>
-        <el-badge :value="goods" class="bag">
-          <img src="../assets/images/header/bag.png">
-        </el-badge>
-        <i class="center">
-          <img src="../assets/images/header/center.png">
-        </i>
+         <el-popover
+          popper-class='head pop-center'
+          width="360"
+          title='SHOPPING BAG'
+          placement='bottom-end'
+          trigger="hover">
+          <shopping-bag></shopping-bag>
+          <el-badge :value="goods" class="bag" slot="reference">
+            <img src="../assets/images/header/bag.png">
+          </el-badge>
+        </el-popover>
+        <el-popover
+          width="200"
+          trigger="hover">
+          <i class="center" slot="reference">
+            <img src="../assets/images/header/center.png">
+          </i>
+        </el-popover>
         <i class="it">
           <img src="../assets/images/header/IT.png">
         </i>
@@ -25,35 +37,68 @@
         <router-link to='/'>
           <img src="../assets/images/header/logo.png" alt="COSMI HOME">
         </router-link>
-      </h1>      
+      </h1>
       <div class="nav">
         <ul>
-          <li class="nav-item" v-for="item in navList" :key="item">{{item}}</li>
+          <li class="nav-item" v-for="item in navList" :key="item" @mouseenter="Detai(item)" @mouseleave="Detai()">{{item}}</li>
+        </ul>
+      </div>
+      <div class="detail" ref="detail" @mouseenter="Detai(true)" @mouseleave="Detai()">
+        <ul class="main">
+          <li v-for="(value, key) in details" :key="key">
+            <div v-if="key === 'new'" class="new">
+              <div class="img"><img :src="value.img"></div>
+              <div class="name">{{value.name}}</div>
+              <div class="descr">{{value.descr}}</div>
+            </div>
+            <h4 v-else>{{key}}</h4>
+            <ul v-if="key !== 'new'" class="kind">
+              <li v-for="(item, index) in value" :key="index">{{item}}</li>
+            </ul>
+          </li>
+          <div class="all"><span>SHOP ALl</span> <i class="el-icon-arrow-right"></i></div>
         </ul>
       </div>
     </div>
   </header>
 </template>
+
 <script>
-// import { Button, Select } from 'element-ui';
+import ShoppingBag from './ShoppingBag'
 export default {
+  components: {
+    ShoppingBag
+  },
   data () {
     return {
       navList: ['HOME', 'MAKEUP', 'NEWS'],
       keyword: '',
-      goods: 0
+      goods: 0,
+      details: {
+        new: { img: '/static/images/header/pro.png', name: 'NEW CRUSHED LIQUD COLOR', descr: 'This is the product description,We can add it no more than 3 liness.No more, no more' },
+        EYES: ['Primer', 'Eyeshadows', 'Eye pencils', 'Nascaras', 'Eyeliners', 'Eyebrows'],
+        LIPS: ['Lip Pencil', 'Lipgloss', 'Lipstick', 'Lip Kit'],
+        FACE: ['Primer', 'Eyeshadows', 'Eye pencils', 'Nascaras', 'Eyeliners', 'Eyebrows'],
+        HANDS: ['Nail Polishe', 'Nail Care', 'French Manicure', 'Nail Polish Removers', 'Nail Polish Fixers']
+      }
     }
   },
   methods: {
     querySearchAsync (queryString, cb) {
-      cb([
-        { "value": "(小杨生煎)西郊百联餐厅", "address": "长宁区仙霞西路88号百联2楼" },
-        { "value": "阳阳麻辣烫", "address": "天山西路389号" },
-        { "value": "南拳妈妈龙虾盖浇饭", "address": "普陀区金沙江路1699号鑫乐惠美食广场A13" }
-      ])
+      const data = [
+        { 'value': '(小杨生煎)西郊百联餐厅', 'address': '长宁区仙霞西路88号百联2楼' },
+        { 'value': '阳阳麻辣烫', 'address': '天山西路389号' },
+        { 'value': '南拳妈妈龙虾盖浇饭', 'address': '普陀区金沙江路1699号鑫乐惠美食广场A13' }
+      ]
+      console.log(queryString)
+      cb(data)
     },
     handleSelect (item) {
       console.log(item)
+    },
+    Detai (item) {
+      if (!item) return this.$refs.detail.classList.remove('show')
+      this.$refs.detail.classList.add('show')
     }
   }
 }
@@ -62,6 +107,7 @@ export default {
 <style lang="less" scoped>
   header {
     background-color: #000;
+    position: relative;
     >div {
       height: 100px;
       display: flex;
@@ -69,7 +115,7 @@ export default {
       justify-content: space-between;
       line-height: 100px;
     }
-    .tools {      
+    .tools {
       width: 40%;
       text-align: right;
       .it {
@@ -84,8 +130,28 @@ export default {
       img{
         transform: translateY(5px)
       }
+      .bag {
+        margin: 30px 0;
+        height: 40px;
+        img{
+          transform: translateY(-25px)
+        }
+      }
+      @media only screen and (max-width: 991px) {
+        .search {
+          display: none;
+        }
+      }
+      @media only screen and (max-width: 767px) {
+        .it {
+          display: none;
+        }
+        .center {
+          margin-right: 10px;
+        }
+      }
     }
-    .nav {      
+    .nav {
       width: 40%;
       display: flex;
       flex-direction: row;
@@ -100,8 +166,11 @@ export default {
         justify-content: space-between;
       }
       .nav-item {
+        margin: 30px 0 0;
         cursor: pointer;
         font-size: 1.6em;
+        line-height: 40px;
+        padding-bottom: 30px;
         &:hover {
           text-decoration: underline;
         }
@@ -111,9 +180,97 @@ export default {
       width: 20%;
       min-width: 180px;
       text-align: center;
-      vertical-align: center;
       img {
         margin-top: 3px;
+      }
+    }
+    @media only screen and (max-width: 500px) {
+      .tools,.nav {
+        display: none;
+      }
+      .main {
+        justify-content: center;
+      }
+    }
+    .detail {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      z-index: -1;
+      height: 376px;
+      background-color: #fff;
+      width: 100%;
+      opacity: 0;
+      transition: opacity .5s ease-in-out, z-index .1s ease .5s;
+      &.show {
+        transition: opacity .5s ease-in-out;
+        z-index: 1;
+        opacity: 1;
+      }
+      .main {
+        position: relative;
+        line-height: 36px;
+        display: flex;
+        justify-content: space-between;
+        >li {
+          box-sizing: border-box;
+          width: 160px;
+          &:first-child {
+            width: 220px;
+            padding: 20px 10px 0;
+          }
+          .img {
+            height: 200px;
+          }
+          .name {
+            margin-top: 8px;
+            font-size: 1.6em;
+            font-weight: 500;
+            line-height: 24px;
+          }
+          .descr {
+            margin-top: 14px;
+            font-size: 1.4em;
+            line-height: 22px;
+            height: 66px;
+            overflow: hidden;
+          }
+          >h4 {
+            margin-top: 28px;
+            font-size: 1.6em;
+            line-height: 52px;
+            font-weight: 600;
+          }
+        }
+        .all {
+          position: absolute;
+          bottom: 37px;
+          right: 0;
+          font-size: 1.6em;
+          line-height: 20px;
+          color: #151515;
+          >i {
+            font-size: 19px;
+            line-height: 22px;
+          }
+          >span {
+            margin-right: 10px;
+            cursor: pointer;
+            &:hover {
+              border-bottom: 1px solid #151515;
+            }
+          }
+        }
+      }
+      .kind>li {
+        margin-top: 10px;
+        cursor: pointer;
+        font-size: 1.4em;
+        line-height: 24px;
+        color: #565656;
+        &:hover {
+          color: #151515;
+        }
       }
     }
   }
@@ -137,7 +294,7 @@ export default {
       }
     }
     .el-badge__content.is-fixed {
-      top: 32px;
+      top: 6px;
       background-color: rgb(255,54,54);
       border: none;
       height: 16px;
@@ -145,5 +302,15 @@ export default {
       padding: 0 5px;
     }
   }
+  .el-popover.el-popper.head {
+    color: #151515;
+    border-color: #cacaca;
+    border-radius: 0;
+    padding-left: 20px;
+    .el-popover__title {
+      margin-top: 10px;
+      font-size: 18px;
+      font-weight: 500;
+    }
+  }
 </style>
-

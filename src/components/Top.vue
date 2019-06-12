@@ -3,7 +3,7 @@
 </template>
 <script>
 export default {
-  data() {
+  data () {
     return {
       msg: 'Free Shipping For Orders Over $50'
     }
@@ -21,6 +21,3 @@ export default {
     background-color: #fff;
   }
 </style>
-
-
-
