@@ -1,50 +1,46 @@
 <template>
-<div class="bag">
-  <ul>
-    <li v-for="(item, index) in baglist" :key="index">
-      <div class="img">
-        <img :src="item.img">
-      </div>
-      <div class="right">
-        <div class="name">{{item.name}}</div>
-        <div class="bottom">
-          <el-input-number :min=0 size="mini" v-model="item.count"></el-input-number>
-          <span class="price">${{item.price}}</span>
+  <div class="bag">
+    <ul>
+      <li v-for="(item, index) in cartlist" :key="index">
+        <div class="img">
+          <img :src="item.img">
         </div>
+        <div class="right">
+          <div class="name">{{item.name}}</div>
+          <div class="bottom">
+            <el-input-number :min=0 size="mini" v-model="item.count" @change='change(item, index)'></el-input-number>
+            <span class="price">${{(+item.price || 0).toFixed(2)}}</span>
+          </div>
+        </div>
+      </li>
+    </ul>
+    <div class="total">
+      <div class="top">
+        <span class="acounts">{{total.counts}} ITEMS</span>
+        <span class="subtotal">SUBTOTAL ${{(+total.subtotal || 0).toFixed(2)}}</span>
       </div>
-    </li>
-  </ul>
-  <div class="total">
-    <div class="top">
-      <span class="acounts">{{total.counts}} ITEMS</span>
-      <span class="subtotal">SUBTOTAL ${{total.subtotal}}</span>
+      <div class="sellInfo">
+        $12 away from free standard shipping!
+      </div>
     </div>
-    <div class="sellInfo">
-      $12 away from free standard shipping!
+    <div class="operating">
+      <el-button size="mini" @click="viewCart">VIEW CART</el-button>
+      <el-button size="mini" class="checkout" @click="checkout">CHECKOUT</el-button>
     </div>
   </div>
-  <div class="operating">
-    <el-button size="mini" @click="viewCart">VIEW CART</el-button>
-    <el-button size="mini" class="checkout" @click="checkout">CHECKOUT</el-button>
-  </div>
-</div>
 </template>
+
 <script>
+import { mapState } from 'vuex'
 export default {
   data () {
-    return {
-      baglist: [
-        { img: '/static/images/bag/product.png', name: 'PRODUCT NAME BALABALABALABALABALA BALABALA', count: 1, price: 30 },
-        { img: '/static/images/bag/product.png', name: 'PRODUCT NAME BALABALABALABALABALA BALABALA', count: 2, price: 30 },
-        { img: '/static/images/bag/product.png', name: 'PRODUCT NAME BALABALABALABALABALA BALABALA', count: 3, price: 30 },
-        { img: '/static/images/bag/product.png', name: 'PRODUCT NAME BALABALABALABALABALA BALABALA', count: 4, price: 30 }
-      ]
-    }
+    return {}
   },
   computed: {
+    ...mapState(['cartlist']),
     total () {
       let total = { counts: 0, subtotal: 0 }
-      this.baglist.forEach(_ => {
+      this.cartlist.forEach(_ => {
         total.counts += _.count
         total.subtotal += _.price * _.count
       })
@@ -57,6 +53,9 @@ export default {
     },
     checkout () {
       console.log('checkout')
+    },
+    change (item, index) {
+      if (item.count === 0) this.cartlist.splice(index, 1)
     }
   }
 }

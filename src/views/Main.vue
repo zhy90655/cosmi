@@ -1,8 +1,8 @@
 <template>
   <div class="container">
-    <div class="banner">
+    <section class="banner">
       <div class="main"></div>
-    </div>
+    </section>
     <div class="hot">
       <h3 class="title">BEST SELLER</h3>
       <div class="main">
@@ -36,7 +36,7 @@
         </div>
       </div>
     </div>
-    <div class="prodotti">
+    <section class="prodotti">
       <h3 class="title">PRODOTTI</h3>
       <div class="main">
         <ul @touchstart="pts" @touchmove="ptm" @touchend="pte" ref="pul">
@@ -45,8 +45,8 @@
           </li>
         </ul>
       </div>
-    </div>
-    <div class="serv">
+    </section>
+    <section class="serv">
       <div class="main">
         <div class="content">
           <ul @touchstart="sts" @touchmove="stm" @touchend="ste" ref="sul">
@@ -59,8 +59,8 @@
           </ul>
         </div>
       </div>
-    </div>
-    <div class="aboutus">
+    </section>
+    <section class="aboutus">
       <div class="main">
         <div class="word">
           <div class="title">ABOUT US</div>
@@ -68,8 +68,8 @@
         </div>
         <div class="pic"></div>
       </div>
-    </div>
-    <div class="ins">
+    </section>
+    <section class="ins">
       <div class="main">
          <div class="content">
             <ul @touchstart="its" @touchmove="itm" @touchend="ite" ref="iul">
@@ -85,14 +85,37 @@
             </ul>
          </div>
       </div>
-    </div>
+    </section>
+    <el-dialog
+        title="GET 10% OFF YOUR FIRST ORDER"
+        :visible.sync="dialogVisible"
+        :lock-scroll='false'
+        width="794px"
+        custom-class='discount'>
+        <div class="discountInfo">
+          <p class="tip">Subsctibe to get 10% off your fist order.</p>
+          <el-form :model="discountForm" :rules="rules" label-position="top" ref="discountForm" label-width="100px" class="discountForm">
+            <el-form-item label="Email" prop="email">
+              <el-input v-model="discountForm.email"></el-input>
+            </el-form-item>
+            <el-form-item prop="policy">
+              <el-checkbox v-model="discountForm.policy">
+                Having read the privacy policy information, I consent to the processing of my personal data for advertising and promotional purposes.
+                <router-link to='/policy' style="display:block;color:#565656;text-decoration: underline;">Privacy policy</router-link>
+              </el-checkbox>
+            </el-form-item>
+          </el-form>
+        </div>
+        <div style="text-align: center" slot="footer" class="dialog-footer">
+          <el-button type="primary" @click="dialogVisible = false">GET 10% OFF</el-button>
+        </div>
+      </el-dialog>
   </div>
 </template>
 
 <script>
 export default {
   data () {
-    window._this = this
     return {
       hots: [
         {
@@ -154,7 +177,18 @@ export default {
         { img: '/static/images/main/ins2.png', info: 'PRODUCT NAME SECOND LINE', name: 'Kate', msg: 'I Love cosmi.Yesterday I went to a party.All of my friends love my rouge' }
       ],
       sTranSteps: 0,
-      iTranSteps: 0
+      iTranSteps: 0,
+      rules: {
+        email: [
+          { required: true, message: 'Please enter your email address.', trigger: 'blur' },
+          { type: 'email', message: 'Please enter your email address in the correct format.', trigger: ['blur', 'change'] }
+        ],
+        policy: [
+          { required: true, message: 'Please enter your email address.', trigger: 'blur' }
+        ]
+      },
+      discountForm: { email: '', policy: true },
+      dialogVisible: false
     }
   },
   methods: {
@@ -211,9 +245,9 @@ export default {
     },
     pte (e) {
       if (this.screenWidth) return
+      this.$refs.pul.classList.add('tran')
       const moveX = e.changedTouches[0].screenX - this.startX
       let step = moveX / this.itemWidth
-      this.$refs.pul.classList.add('tran')
       if (Math.abs(step) > 0.3) {
         step = step > 0 ? Math.ceil(step) : Math.floor(step)
         this.pTranSteps += step
@@ -276,6 +310,16 @@ export default {
         }
       }
       this.style.transform = 'translateX(' + this.iTranSteps * this.itemWidth + 'px)'
+    },
+    submitForm (formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          console.log(111111111)
+        } else {
+          console.log('error submit!!')
+          return false
+        }
+      })
     }
   }
 }
@@ -612,6 +656,64 @@ export default {
       >.el-col {
         flex-shrink: 0;
       }
+    }
+  }
+  @media only screen and (max-width: 991px) {
+    .el-dialog__wrapper,.detail {
+      display: none;
+    }
+  }
+  .el-dialog.discount {
+    border: 1px solid #000;
+    border-radius: 0;
+    font-weight: 500;
+    padding: 30px 60px 60px;
+    .el-dialog__title {
+      font-size: 36px;
+    }
+    .el-dialog__body {
+      padding-top: 20px;
+      .tip {
+        font-size: 18px;
+      }
+      .discountForm {
+        .el-form-item {
+          margin-bottom: 16px;
+        }
+        .el-form-item__label {
+          margin-top: 30px;
+        }
+      }
+    }
+    .el-button--primary {
+      font-size: 18px;
+      width: 244px;
+    }
+    .el-checkbox__input {
+      transform: translateY(-34px);
+      &.is-checked {
+        span {
+          background-color: #151515;
+          border-color: #151515;
+        }
+      }
+      >span {
+        width: 20px;
+        height: 20px;
+        border-color: #151515;
+        &::after {
+          width: 6px;
+          height: 12px;
+          left: 5px;
+        }
+      }
+    }
+    .el-checkbox__label {
+      width: 600px;
+      font-size: 14px;
+      white-space: normal;
+      color: #565656 !important;
+
     }
   }
 </style>

@@ -12,19 +12,26 @@
           @select="handleSelect"
         ></el-autocomplete>
          <el-popover
-          popper-class='head pop-center'
+          popper-class='head'
           width="360"
           title='SHOPPING BAG'
           placement='bottom-end'
           trigger="hover">
           <shopping-bag></shopping-bag>
-          <el-badge :value="goods" class="bag" slot="reference">
+          <el-badge :value="carCount" class="bag" slot="reference">
             <img src="../assets/images/header/bag.png">
           </el-badge>
         </el-popover>
         <el-popover
-          width="200"
+          :width="centerPopoverInfo.width"
+          :offset='centerPopoverInfo.offset'
+          popper-class='head pop-center'
+          v-model="center"
           trigger="hover">
+          <login v-if="!isLogin"></login>
+          <ul class="personal" v-else>
+            <li v-for="(item, index) in setList" :key="index">{{item}}</li>
+          </ul>
           <i class="center" slot="reference">
             <img src="../assets/images/header/center.png">
           </i>
@@ -65,22 +72,42 @@
 
 <script>
 import ShoppingBag from './ShoppingBag'
+import Login from './Login'
+import { mapState } from 'vuex'
 export default {
   components: {
-    ShoppingBag
+    ShoppingBag,
+    Login
   },
   data () {
     return {
       navList: ['HOME', 'MAKEUP', 'NEWS'],
       keyword: '',
-      goods: 0,
+      center: false,
       details: {
         new: { img: '/static/images/header/pro.png', name: 'NEW CRUSHED LIQUD COLOR', descr: 'This is the product description,We can add it no more than 3 liness.No more, no more' },
         EYES: ['Primer', 'Eyeshadows', 'Eye pencils', 'Nascaras', 'Eyeliners', 'Eyebrows'],
         LIPS: ['Lip Pencil', 'Lipgloss', 'Lipstick', 'Lip Kit'],
         FACE: ['Primer', 'Eyeshadows', 'Eye pencils', 'Nascaras', 'Eyeliners', 'Eyebrows'],
         HANDS: ['Nail Polishe', 'Nail Care', 'French Manicure', 'Nail Polish Removers', 'Nail Polish Fixers']
-      }
+      },
+      setList: ['MY ACCOUNT', 'ORDERS', 'WISHLIST', 'LOG OUT']
+    }
+  },
+  watch: {
+    isLogin (v) {
+      if (v) this.center = false
+    }
+  },
+  computed: {
+    ...mapState(['cartlist', 'isLogin']),
+    carCount () {
+      let count = 0
+      this.cartlist.forEach(_ => (count += _.count))
+      return count
+    },
+    centerPopoverInfo () {
+      return this.isLogin ? { width: 146, offset: 0 } : { width: 366, offset: -98 }
     }
   },
   methods: {
@@ -311,6 +338,24 @@ export default {
       margin-top: 10px;
       font-size: 18px;
       font-weight: 500;
+    }
+    &.pop-center {
+      padding: 0;
+      transform: translateY(13px);
+      .el-popover__title {
+        padding-left: 18px;
+        margin-top: 20px;
+      }
+    }
+    .personal {
+      padding: 12px 0;
+      line-height: 33px;
+      text-align: center;
+      font-size: 14px;
+      >li:hover {
+        cursor: pointer;
+        background-color: #f9ecde;
+      }
     }
   }
 </style>

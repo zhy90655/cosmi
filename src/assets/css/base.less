@@ -14,3 +14,29 @@ html {overflow-y: scroll;}
 .clearfix:after {content: "."; display: block; height:0; clear:both; visibility: hidden;}
 .clearfix { *zoom:1; }
 .main {max-width: 1200px; width: 100%; margin: 0 auto;}
+button.el-button.el-button--primary {
+  width: 196px;
+  background-color: #232323;
+  font-size: 16px;
+  border-radius: 0;
+}
+.el-form {
+  .el-input__inner {
+    border-radius: 0;
+    border-color: #636363;
+    color: #151515;
+    height: 44px;
+    line-height: 44px;
+    &:hover {
+      border-color: #787878;
+    }
+  }
+  .el-form-item__label {
+    font-size: 17px;
+    line-height: 18px;
+    color: #151515;
+    &::before {
+      display: none;
+    }
+  }
+}
