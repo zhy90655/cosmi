@@ -109,7 +109,7 @@
           </el-form>
         </div>
         <div style="text-align: center" slot="footer" class="dialog-footer">
-          <el-button type="primary" @click="dialogVisible = false">GET 10% OFF</el-button>
+          <el-button type="primary" @click="submitForm('discountForm')">GET 10% OFF</el-button>
         </div>
       </el-dialog>
   </div>
@@ -118,6 +118,13 @@
 <script>
 export default {
   data () {
+    var validatePolicy = (rule, value, callback) => {
+      if (!value) {
+        callback(new Error('Please agree the policy.'))
+      } else {
+        callback()
+      }
+    }
     return {
       hots: [
         {
@@ -186,11 +193,11 @@ export default {
           { type: 'email', message: 'Please enter your email address in the correct format.', trigger: ['blur', 'change'] }
         ],
         policy: [
-          { required: true, message: 'Please enter your email address.', trigger: 'blur' }
+          { validator: validatePolicy, trigger: 'change' }
         ]
       },
       discountForm: { email: '', policy: true },
-      dialogVisible: false
+      dialogVisible: true
     }
   },
   methods: {
@@ -253,7 +260,7 @@ export default {
     submitForm (formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          console.log(111111111)
+          this.dialogVisible = false
         } else {
           console.log('error submit!!')
           return false
@@ -600,7 +607,7 @@ export default {
     }
   }
   @media only screen and (max-width: 991px) {
-    .el-dialog__wrapper,.detail {
+    .el-dialog__wrapper,.detail,.v-modal {
       display: none;
     }
   }
