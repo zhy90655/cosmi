@@ -6,8 +6,8 @@
     <div class="hot">
       <h3 class="title">BEST SELLER</h3>
       <div class="main">
-        <div class="list" @touchstart="hts" @touchmove="htm" @touchend="hte">
-          <el-row :gutter="20" ref="hotContainer">
+        <div class="list" @touchstart="touchstart($event, 'h')" @touchmove="touchmove($event, 'h')" @touchend="touchend($event, 'h', hots.length-1)">
+          <el-row :gutter="20" ref="hul">
             <el-col :lg="8" :xl="8" :md="8" :sm="12" :xm='24' v-for="(pro, index) in hots" :key="index">
               <div class="item">
                 <div class="img">
@@ -39,17 +39,19 @@
     <section class="prodotti">
       <h3 class="title">PRODOTTI</h3>
       <div class="main">
-        <ul @touchstart="pts" @touchmove="ptm" @touchend="pte" ref="pul">
-          <li v-for="(item, index) in prodottis" :key="index" :class="{thrid: index ===2, fouth: index === 3}">
-            <img :src="item.img">
-          </li>
-        </ul>
+        <div class="wrapper" @touchstart="touchstart($event, 'p')" @touchmove="touchmove($event, 'p')" @touchend="touchend($event, 'p', prodottis.length-1)" >
+          <ul ref="pul">
+            <li v-for="(item, index) in prodottis" :key="index" :class="{thrid: index ===2, fouth: index === 3}">
+              <img :src="item.img">
+            </li>
+          </ul>
+        </div>
       </div>
     </section>
     <section class="serv">
       <div class="main">
         <div class="content">
-          <ul @touchstart="sts" @touchmove="stm" @touchend="ste" ref="sul">
+          <ul @touchstart="touchstart($event, 's')" @touchmove="touchmove($event, 's')" @touchend="touchend($event, 's', 1)" ref="sul">
             <li v-for="(item, index) in servicelist" :key="index">
               <div class="img">
                 <img :src="item.img">
@@ -72,7 +74,7 @@
     <section class="ins">
       <div class="main">
          <div class="content">
-            <ul @touchstart="its" @touchmove="itm" @touchend="ite" ref="iul">
+            <ul @touchstart="touchstart($event, 'i')" @touchmove="touchmove($event, 'i')" @touchend="touchend($event, 'i', insList.length-1)" ref="iul">
               <li v-for="(item, index) in insList" :key="index">
                 <div class="img">
                   <img :src="item.img">
@@ -152,7 +154,7 @@ export default {
           ]
         }
       ],
-      tranSteps: 0,
+      hTranSteps: 0,
       prodottis: [
         { img: '/static/images/main/product3.png', info: 'PRODUCT NAME SECOND LINE' },
         { img: '/static/images/main/product3.png', info: 'PRODUCT NAME SECOND LINE' },
@@ -198,118 +200,55 @@ export default {
     next (pro) {
       if (pro.colors.length - 1 > pro.activeIndex) pro.activeIndex += 1
     },
-    hts (e) {
-      this.screenWidth = document.body.scrollWidth
-      if (this.screenWidth >= 992) return
-      this.itemWidth = this.$refs.hotContainer.$children[0].$el.offsetWidth
+    touchstart (e, tag) {
+      this.screenWidth = tag !== 'p' ? document.body.scrollWidth >= 992 : document.body.scrollWidth >= 768
+      if (this.screenWidth) return
+      this.style = this.$refs[tag + 'ul'].style
+      this.itemWidth = tag === 'h' ? this.$refs[tag + 'ul'].$children[0].$el.offsetWidth : this.$refs[tag + 'ul'].parentElement.offsetWidth
       this.startX = e.changedTouches[0].screenX
-      this.$refs.hotContainer.$children.forEach(_ => _.$el.classList.remove('tran'))
-    },
-    htm (e) {
-      if (this.screenWidth >= 992) return
-      const moveX = e.changedTouches[0].screenX - this.startX
-      const translateX = moveX + this.tranSteps * this.itemWidth
-      this.$refs.hotContainer.$children.forEach(_ => (_.$el.style.transform = 'translateX(' + translateX + 'px)'))
-    },
-    hte (e) {
-      if (this.screenWidth >= 992) return
-      const moveX = e.changedTouches[0].screenX - this.startX
-      let step = moveX / this.itemWidth
-      if (Math.abs(step) > 0.3) {
-        step = step > 0 ? Math.ceil(step) : Math.floor(step)
-        this.tranSteps += step
-        if (this.screenWidth >= 768) {
-          this.tranSteps = this.tranSteps <= -1 ? -1 : 0
-        } else {
-          this.tranSteps = this.tranSteps <= -2 ? -2 : this.tranSteps <= -1 ? -1 : 0
-        }
+      if (tag === 'h') {
+        this.$refs[tag + 'ul'].$children.forEach(_ => _.$el.classList.remove('tran'))
+      } else {
+        this.$refs[tag + 'ul'].classList.remove('tran')
       }
-      this.$refs.hotContainer.$children.forEach(_ => {
-        _.$el.classList.add('tran')
-        _.$el.style.transform = 'translateX(' + this.tranSteps * this.itemWidth + 'px)'
-      })
     },
-    pts (e) {
-      this.screenWidth = document.body.scrollWidth >= 768
-      if (this.screenWidth) return
-      this.style = this.$refs.pul.style
-      this.itemWidth = this.$refs.pul.parentElement.offsetWidth
-      this.startX = e.changedTouches[0].screenX
-      this.$refs.pul.classList.remove('tran')
-    },
-    ptm (e) {
+    touchmove (e, tag) {
       if (this.screenWidth) return
       const moveX = e.changedTouches[0].screenX - this.startX
-      const translateX = moveX + this.pTranSteps * this.itemWidth
-      this.style.transform = 'translateX(' + translateX + 'px)'
-    },
-    pte (e) {
-      if (this.screenWidth) return
-      this.$refs.pul.classList.add('tran')
-      const moveX = e.changedTouches[0].screenX - this.startX
-      let step = moveX / this.itemWidth
-      if (Math.abs(step) > 0.3) {
-        step = step > 0 ? Math.ceil(step) : Math.floor(step)
-        this.pTranSteps += step
-        this.pTranSteps = this.pTranSteps >= 0 ? 0 : this.pTranSteps <= -3 ? -3 : this.pTranSteps
+      if (Math.abs(moveX) > 10 && e.cancelable) e.preventDefault()
+      const translateX = moveX + this[tag + 'TranSteps'] * this.itemWidth
+      if (tag === 'h') {
+        this.$refs[tag + 'ul'].$children.forEach(_ => (_.$el.style.transform = 'translateX(' + translateX + 'px)'))
+      } else {
+        this.style.transform = 'translateX(' + translateX + 'px)'
       }
-      this.style.transform = 'translateX(' + this.pTranSteps * this.itemWidth + 'px)'
     },
-    sts (e) {
-      this.screenWidth = document.body.scrollWidth >= 992
-      if (this.screenWidth) return
-      this.style = this.$refs.sul.style
-      this.itemWidth = this.$refs.sul.parentElement.offsetWidth
-      this.startX = e.changedTouches[0].screenX
-      this.$refs.sul.classList.remove('tran')
-    },
-    stm (e) {
-      if (this.screenWidth) return
-      const moveX = e.changedTouches[0].screenX - this.startX
-      const translateX = moveX + this.sTranSteps * this.itemWidth
-      this.style.transform = 'translateX(' + translateX + 'px)'
-    },
-    ste (e) {
+    touchend (e, tag, length) {
       if (this.screenWidth) return
       const moveX = e.changedTouches[0].screenX - this.startX
       let step = moveX / this.itemWidth
-      this.$refs.sul.classList.add('tran')
       if (Math.abs(step) > 0.3) {
         step = step > 0 ? Math.ceil(step) : Math.floor(step)
-        this.sTranSteps += step
-        this.sTranSteps = this.sTranSteps >= 0 ? 0 : -1
-      }
-      this.style.transform = 'translateX(' + this.sTranSteps * this.itemWidth + 'px)'
-    },
-    its (e) {
-      this.screenWidth = document.body.scrollWidth >= 992
-      if (this.screenWidth) return
-      this.style = this.$refs.iul.style
-      this.itemWidth = this.$refs.iul.parentElement.offsetWidth
-      this.startX = e.changedTouches[0].screenX
-      this.$refs.iul.classList.remove('tran')
-    },
-    itm (e) {
-      if (this.screenWidth) return
-      const moveX = e.changedTouches[0].screenX - this.startX
-      const translateX = moveX + this.iTranSteps * this.itemWidth
-      this.style.transform = 'translateX(' + translateX + 'px)'
-    },
-    ite (e) {
-      if (this.screenWidth) return
-      const moveX = e.changedTouches[0].screenX - this.startX
-      let step = moveX / this.itemWidth
-      this.$refs.iul.classList.add('tran')
-      if (Math.abs(step) > 0.3) {
-        step = step > 0 ? Math.ceil(step) : Math.floor(step)
-        this.iTranSteps += step
+        this[tag + 'TranSteps'] += step
         if (document.body.scrollWidth >= 768) {
-          this.iTranSteps = this.iTranSteps >= 0 ? 0 : -1
+          this[tag + 'TranSteps'] = this[tag + 'TranSteps'] <= -1 ? -1 : 0
         } else {
-          this.iTranSteps = this.iTranSteps >= 0 ? 0 : this.iTranSteps <= -3 ? -3 : this.iTranSteps
+          this[tag + 'TranSteps'] = this[tag + 'TranSteps'] <= -length ? -length : this[tag + 'TranSteps'] >= 0 ? 0 : this[tag + 'TranSteps']
         }
       }
-      this.style.transform = 'translateX(' + this.iTranSteps * this.itemWidth + 'px)'
+      if (tag === 'h') {
+        this.$refs[tag + 'ul'].$children.forEach(_ => {
+          _.$el.classList.add('tran')
+          setTimeout(() => {
+            _.$el.style.transform = 'translateX(' + this[tag + 'TranSteps'] * this.itemWidth + 'px)'
+          })
+        })
+      } else {
+        this.$refs[tag + 'ul'].classList.add('tran')
+        setTimeout(() => {
+          this.style.transform = 'translateX(' + this[tag + 'TranSteps'] * this.itemWidth + 'px)'
+        })
+      }
     },
     submitForm (formName) {
       this.$refs[formName].validate((valid) => {
@@ -458,7 +397,9 @@ export default {
       margin-bottom: 30px;
     }
     .main {
-      overflow: hidden;
+      .wrapper {
+        overflow: hidden;
+      }
       ul {
         display: flex;
         flex-flow: row wrap;
