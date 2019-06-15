@@ -91,7 +91,6 @@
     <el-dialog
         title="GET 10% OFF YOUR FIRST ORDER"
         :visible.sync="dialogVisible"
-        :lock-scroll='false'
         width="794px"
         custom-class='discount'>
         <div class="discountInfo">
