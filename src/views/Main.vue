@@ -609,6 +609,10 @@ export default {
     .el-dialog__wrapper,.detail,.v-modal {
       display: none;
     }
+    body {
+      padding-right: 0!important;
+      overflow: auto!important;
+    }
   }
   .el-dialog.discount {
     border: 1px solid #000;
