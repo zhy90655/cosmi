@@ -30,7 +30,7 @@
           trigger="hover">
           <login v-if="!isLogin"></login>
           <ul class="personal" v-else>
-            <li v-for="(item, index) in setList" :key="index">{{item}}</li>
+            <li v-for="(item, index) in setList" :key="index" @click="handelCenterClick(item.params)">{{item.title}}</li>
           </ul>
           <i class="center" slot="reference">
             <img src="../assets/images/header/center.png">
@@ -73,7 +73,7 @@
 <script>
 import ShoppingBag from './ShoppingBag'
 import Login from './Login'
-import { mapState } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 export default {
   components: {
     ShoppingBag,
@@ -91,16 +91,22 @@ export default {
         FACE: ['Primer', 'Eyeshadows', 'Eye pencils', 'Nascaras', 'Eyeliners', 'Eyebrows'],
         HANDS: ['Nail Polishe', 'Nail Care', 'French Manicure', 'Nail Polish Removers', 'Nail Polish Fixers']
       },
-      setList: ['MY ACCOUNT', 'ORDERS', 'WISHLIST', 'LOG OUT']
+      setList: [{ title: 'MY ACCOUNT', params: 'myAccount' }, { title: 'ORDERS', params: 'orders' }, { title: 'WISHLIST', params: 'wishlist' }, { title: 'LOG OUT' }]
     }
   },
   watch: {
     isLogin (v) {
       if (v) this.center = false
+    },
+    showLogin (v) {
+      if (v) this.center = v
+    },
+    center (v) {
+      if (!v) this.set_showLogin(false)
     }
   },
   computed: {
-    ...mapState(['cartlist', 'isLogin']),
+    ...mapState(['cartlist', 'isLogin', 'showLogin']),
     carCount () {
       let count = 0
       this.cartlist.forEach(_ => (count += _.count))
@@ -111,6 +117,7 @@ export default {
     }
   },
   methods: {
+    ...mapMutations(['set_login', 'set_showLogin']),
     querySearchAsync (queryString, cb) {
       const data = [
         { 'value': '(小杨生煎)西郊百联餐厅', 'address': '长宁区仙霞西路88号百联2楼' },
@@ -119,6 +126,14 @@ export default {
       ]
       console.log(queryString)
       cb(data)
+    },
+    handelCenterClick (params) {
+      if (params) this.$router.push('/personalCenter/' + params)
+      else {
+        console.log('logout')
+        this.set_login(false)
+        this.center = false
+      }
     },
     handleSelect (item) {
       console.log(item)
@@ -223,15 +238,15 @@ export default {
       position: absolute;
       top: 100%;
       left: 0;
-      z-index: -1;
-      height: 376px;
+      height: 0;
+      overflow: hidden;
       background-color: #fff;
       width: 100%;
       opacity: 0;
-      transition: opacity .5s ease-in-out, z-index .1s ease .5s;
+      transition: opacity .5s ease-in-out, height .1s ease .5s;
       &.show {
         transition: opacity .5s ease-in-out;
-        z-index: 1;
+        height: 376px;
         opacity: 1;
       }
       .main {

@@ -292,7 +292,7 @@ export default {
         display:table;
         height: 52px;
         font-size: 1.6em;
-        width: 132px;
+        width: 145px;
         margin: 0 auto;
         p {
           display:table-cell;

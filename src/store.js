@@ -11,15 +11,18 @@ export default new Vuex.Store({
       { img: '/static/images/bag/product.png', name: 'PRODUCT NAME BALABALABALABALABALA BALABALA', count: 3, price: 130.21 },
       { img: '/static/images/bag/product.png', name: 'PRODUCT NAME BALABALABALABALABALA BALABALA', count: 4, price: 1130.32 }
     ],
-    isLogin: false
+    isLogin: true,
+    showLogin: false
   },
   mutations: {
     set_cartlist (state, n) {
       state.cartlist = n
     },
     set_login (state, n) {
-      console.log(n)
       state.isLogin = n
+    },
+    set_showLogin (state, n) {
+      state.showLogin = n
     }
   },
   actions: {
