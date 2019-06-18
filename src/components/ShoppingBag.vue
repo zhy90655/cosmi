@@ -2,11 +2,11 @@
   <div class="bag">
     <ul>
       <li v-for="(item, index) in cartlist" :key="index">
-        <div class="img">
+        <div class="img" style="cursor:pointer" @click="productDetail(item.id)">
           <img :src="item.img">
         </div>
         <div class="right">
-          <div class="name">{{item.name}}</div>
+          <div class="name" @click="productDetail(item.id)">{{item.name}}</div>
           <div class="bottom">
             <el-input-number :min=0 size="mini" v-model="item.count" @change='change(item, index)'></el-input-number>
             <span class="price">${{(+item.price || 0).toFixed(2)}}</span>
@@ -56,6 +56,9 @@ export default {
     },
     change (item, index) {
       if (item.count === 0) this.cartlist.splice(index, 1)
+    },
+    productDetail (id) {
+      console.log(id)
     }
   }
 }
@@ -76,6 +79,12 @@ export default {
           flex-direction: column;
           justify-content: space-between;
           padding-bottom: 5px;
+          .name {
+            cursor: pointer;
+            &:hover {
+              text-decoration: underline;
+            }
+          }
           .bottom {
             display: flex;
             justify-content: space-between;

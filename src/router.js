@@ -23,9 +23,24 @@ const router = new Router({
     {
       path: '/personalCenter/:item',
       name: 'personalCenter',
-      component: () => import(/* webpackChunkName: "about" */ './components/PersonalCenter.vue'),
+      component: () => import('./components/personal/PersonalCenter.vue'),
       meta: { requiresLogin: true }
+    },
+    {
+      path: '/products/:kind/:sub?/:productId?',
+      name: 'products',
+      component: () => import('./components/product/Products.vue')
     }
+    // {
+    //   path: '/products/:kind/Subclass/:Sub',
+    //   name: 'Subclass',
+    //   component: () => import('./components/product/productSubclass.vue')
+    // },
+    // {
+    //   path: '/products/:kind/Subclass/:sub/productDetail/:productId',
+    //   name: 'productDetail',
+    //   component: () => import('./components/product/productDetail.vue')
+    // }
   ]
 })
 router.beforeEach((to, from, next) => {

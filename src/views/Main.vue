@@ -10,10 +10,10 @@
           <el-row :gutter="20" ref="hul">
             <el-col :lg="8" :xl="8" :md="8" :sm="12" :xm='24' v-for="(pro, index) in hots" :key="index">
               <div class="item">
-                <div class="img">
+                <div class="img" @click="productDetail(pro.id)">
                   <img :src="(pro.colors[pro.hoverIndex] || pro.colors[pro.activeIndex]).img">
                 </div>
-                <div class="name">
+                <div class="name" @click="productDetail(pro.id)">
                   <p>{{(pro.colors[pro.hoverIndex] || pro.colors[pro.activeIndex]).name}}</p>
                 </div>
                 <div class="color" v-if="pro.colors.length > 1">{{(pro.colors[pro.hoverIndex] || pro.colors[pro.activeIndex]).code}}</div>
@@ -89,32 +89,34 @@
       </div>
     </section>
     <el-dialog
-        title="GET 10% OFF YOUR FIRST ORDER"
-        :visible.sync="dialogVisible"
-        width="794px"
-        custom-class='discount'>
-        <div class="discountInfo">
-          <p class="tip">Subsctibe to get 10% off your fist order.</p>
-          <el-form :model="discountForm" :rules="rules" label-position="top" ref="discountForm" label-width="100px" class="discountForm">
-            <el-form-item label="Email" prop="email">
-              <el-input v-model="discountForm.email"></el-input>
-            </el-form-item>
-            <el-form-item prop="policy">
-              <el-checkbox v-model="discountForm.policy">
-                Having read the privacy policy information, I consent to the processing of my personal data for advertising and promotional purposes.
-                <router-link to='/policy' style="display:block;color:#565656;text-decoration: underline;">Privacy policy</router-link>
-              </el-checkbox>
-            </el-form-item>
-          </el-form>
-        </div>
-        <div style="text-align: center" slot="footer" class="dialog-footer">
-          <el-button type="primary" @click="submitForm('discountForm')">GET 10% OFF</el-button>
-        </div>
-      </el-dialog>
+      title="GET 10% OFF YOUR FIRST ORDER"
+      :visible.sync="dialogVisible"
+      :before-close='beforeClose'
+      width="794px"
+      custom-class='discount'>
+      <div class="discountInfo">
+        <p class="tip">Subsctibe to get 10% off your fist order.</p>
+        <el-form :model="discountForm" :rules="rules" label-position="top" ref="discountForm" label-width="100px" class="discountForm">
+          <el-form-item label="Email" prop="email">
+            <el-input v-model="discountForm.email"></el-input>
+          </el-form-item>
+          <el-form-item prop="policy">
+            <el-checkbox v-model="discountForm.policy">
+              Having read the privacy policy information, I consent to the processing of my personal data for advertising and promotional purposes.
+              <router-link to='/policy' style="display:block;color:#565656;text-decoration: underline;">Privacy policy</router-link>
+            </el-checkbox>
+          </el-form-item>
+        </el-form>
+      </div>
+      <div style="text-align: center" slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="submitForm('discountForm')">GET 10% OFF</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
+import { mapState, mapMutations } from 'vuex'
 export default {
   data () {
     var validatePolicy = (rule, value, callback) => {
@@ -129,6 +131,7 @@ export default {
         {
           hoverIndex: -1,
           activeIndex: 0,
+          id: '0002',
           colors: [
             { code: '132#', color: 'rgb(239, 207, 175)', price: 126, img: '/static/images/main/product2.png', name: 'PRODUCT NAME SECOND LINE' },
             { code: '192#', color: 'rgb(229, 188, 146)', price: 162, img: '/static/images/main/product1.png', name: 'PRODUCT NAME' },
@@ -145,6 +148,7 @@ export default {
         {
           hoverIndex: -1,
           activeIndex: 0,
+          id: '0003',
           colors: [
             { code: '132#', color: 'rgb(239, 207, 175)', price: 136, img: '/static/images/main/product1.png', name: 'PRODUCT NAME' },
             { code: '192#', color: 'rgb(229, 188, 146)', price: 162, img: '/static/images/main/product2.png', name: 'PRODUCT NAME' },
@@ -155,6 +159,7 @@ export default {
         {
           hoverIndex: -1,
           activeIndex: 0,
+          id: '0004',
           colors: [
             { code: '132#', color: 'rgb(239, 207, 175)', price: 188, img: '/static/images/main/product3.png', name: 'PRODUCT NAME SECOND LINE' }
           ]
@@ -195,11 +200,20 @@ export default {
           { validator: validatePolicy, trigger: 'change' }
         ]
       },
-      discountForm: { email: '', policy: true },
-      dialogVisible: true
+      discountForm: { email: '', policy: true }
     }
   },
+  computed: {
+    ...mapState(['dialogVisible'])
+  },
   methods: {
+    ...mapMutations(['set_dialogVisible']),
+    productDetail (id) {
+      console.log(id)
+    },
+    beforeClose (done) {
+      this.set_dialogVisible(false)
+    },
     pre (pro) {
       if (pro.activeIndex > 0) pro.activeIndex -= 1
     },
@@ -259,7 +273,7 @@ export default {
     submitForm (formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.dialogVisible = false
+          this.set_dialogVisible(false)
         } else {
           console.log('error submit!!')
           return false
@@ -283,17 +297,22 @@ export default {
       margin-top: 45px;
       height: 590px;
       .img {
+        cursor: pointer;
         display: inline-block;
         width: 300px;
         height: 300px;
         margin: 16px 0 11px 0;
       }
       .name {
+        cursor: pointer;
         display:table;
         height: 52px;
         font-size: 1.6em;
         width: 145px;
         margin: 0 auto;
+        &:hover {
+          text-decoration: underline;
+        }
         p {
           display:table-cell;
           vertical-align:middle;

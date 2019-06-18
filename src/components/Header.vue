@@ -54,13 +54,13 @@
         <ul class="main">
           <li v-for="(value, key) in details" :key="key">
             <div v-if="key === 'new'" class="new">
-              <div class="img"><img :src="value.img"></div>
-              <div class="name">{{value.name}}</div>
+              <div class="img" @click="productDetail(value.id)"><img :src="value.img"></div>
+              <div class="name" @click="productDetail(value.id)">{{value.name}}</div>
               <div class="descr">{{value.descr}}</div>
             </div>
-            <h4 v-else>{{key}}</h4>
+            <h4 v-else><router-link :to="'/products/'+ key">{{key}}</router-link></h4>
             <ul v-if="key !== 'new'" class="kind">
-              <li v-for="(item, index) in value" :key="index">{{item}}</li>
+              <li v-for="(item, index) in value" :key="index"><router-link :to="'/products/'+ key + '/' + item">{{item}}</router-link></li>
             </ul>
           </li>
           <div class="all"><span>SHOP ALl</span> <i class="el-icon-arrow-right"></i></div>
@@ -85,13 +85,13 @@ export default {
       keyword: '',
       center: false,
       details: {
-        new: { img: '/static/images/header/pro.png', name: 'NEW CRUSHED LIQUD COLOR', descr: 'This is the product description,We can add it no more than 3 liness.No more, no more' },
+        new: { img: '/static/images/header/pro.png', id: '0001', name: 'NEW CRUSHED LIQUD COLOR', descr: 'This is the product description,We can add it no more than 3 liness.No more, no more' },
         EYES: ['Primer', 'Eyeshadows', 'Eye pencils', 'Nascaras', 'Eyeliners', 'Eyebrows'],
         LIPS: ['Lip Pencil', 'Lipgloss', 'Lipstick', 'Lip Kit'],
         FACE: ['Primer', 'Eyeshadows', 'Eye pencils', 'Nascaras', 'Eyeliners', 'Eyebrows'],
         HANDS: ['Nail Polishe', 'Nail Care', 'French Manicure', 'Nail Polish Removers', 'Nail Polish Fixers']
       },
-      setList: [{ title: 'MY ACCOUNT', params: 'myAccount' }, { title: 'ORDERS', params: 'orders' }, { title: 'WISHLIST', params: 'wishlist' }, { title: 'LOG OUT' }]
+      setList: [{ title: 'MY ACCOUNT', params: 'MyAccount' }, { title: 'ORDERS', params: 'Orders' }, { title: 'WISHLIST', params: 'Wishlist' }, { title: 'LOG OUT' }]
     }
   },
   watch: {
@@ -103,6 +103,9 @@ export default {
     },
     center (v) {
       if (!v) this.set_showLogin(false)
+    },
+    $route () {
+      this.$refs.detail.classList.remove('show')
     }
   },
   computed: {
@@ -134,6 +137,9 @@ export default {
         this.set_login(false)
         this.center = false
       }
+    },
+    productDetail (id) {
+      console.log(id)
     },
     handleSelect (item) {
       console.log(item)
@@ -243,6 +249,7 @@ export default {
       background-color: #fff;
       width: 100%;
       opacity: 0;
+      z-index: 1;
       transition: opacity .5s ease-in-out, height .1s ease .5s;
       &.show {
         transition: opacity .5s ease-in-out;
@@ -263,12 +270,17 @@ export default {
           }
           .img {
             height: 200px;
+            cursor: pointer;
           }
           .name {
+            cursor: pointer;
             margin-top: 8px;
             font-size: 1.6em;
             font-weight: 500;
             line-height: 24px;
+            &:hover {
+              text-decoration: underline;
+            }
           }
           .descr {
             margin-top: 14px;
@@ -310,8 +322,11 @@ export default {
         font-size: 1.4em;
         line-height: 24px;
         color: #565656;
-        &:hover {
-          color: #151515;
+        a {
+          display: inline-block;
+          &:hover {
+            color: #151515;
+          }
         }
       }
     }
@@ -327,6 +342,7 @@ export default {
         font-size: 22px;
         margin-right: 5px;
         margin-top: 2px;
+        color: #fff;
       }
       .el-input__inner {
         background-color: #000;
