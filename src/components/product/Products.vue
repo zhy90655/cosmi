@@ -26,7 +26,6 @@
 <script>
 export default {
   data () {
-    window._this = this
     return {
       keyword: '',
       componentLsit: ['Mainkind', 'Subclass', 'Detail']

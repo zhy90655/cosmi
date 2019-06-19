@@ -37,7 +37,7 @@ export default {
     return {}
   },
   computed: {
-    ...mapState(['cartlist']),
+    ...mapState(['cartlist', 'productList']),
     total () {
       let total = { counts: 0, subtotal: 0 }
       this.cartlist.forEach(_ => {
@@ -58,7 +58,11 @@ export default {
       if (item.count === 0) this.cartlist.splice(index, 1)
     },
     productDetail (id) {
-      console.log(id)
+      const product = this.productList.find(_ => _.id === id)
+      if (product) {
+        const { kind, sub, productName } = product
+        this.$router.push({ path: `/products/${kind}/${sub}/${productName}`, query: { id } })
+      }
     }
   }
 }

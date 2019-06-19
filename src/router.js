@@ -27,25 +27,14 @@ const router = new Router({
       meta: { requiresLogin: true }
     },
     {
-      path: '/products/:kind/:sub?/:productId?',
+      path: '/products/:kind/:sub?/:productName?',
       name: 'products',
       component: () => import('./components/product/Products.vue')
     }
-    // {
-    //   path: '/products/:kind/Subclass/:Sub',
-    //   name: 'Subclass',
-    //   component: () => import('./components/product/productSubclass.vue')
-    // },
-    // {
-    //   path: '/products/:kind/Subclass/:sub/productDetail/:productId',
-    //   name: 'productDetail',
-    //   component: () => import('./components/product/productDetail.vue')
-    // }
   ]
 })
 router.beforeEach((to, from, next) => {
   if (to.matched.some(record => record.meta.requiresLogin)) {
-    console.log(from)
     if (!Store.state.isLogin) {
       Store.commit('set_showLogin', true)
       next(false)
