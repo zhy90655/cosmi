@@ -91,7 +91,6 @@
     <el-dialog
       title="GET 10% OFF YOUR FIRST ORDER"
       :visible.sync="dialogVisible"
-      :before-close='beforeClose'
       width="794px"
       custom-class='discount'>
       <div class="discountInfo">
@@ -204,15 +203,23 @@ export default {
     }
   },
   computed: {
-    ...mapState(['dialogVisible'])
+    ...mapState(['productList']),
+    dialogVisible: {
+      get () {
+        return this.$store.state.dialogVisible
+      },
+      set (val) {
+        this.$store.commit('set_dialogVisible', val)
+      }
+    }
   },
   methods: {
-    ...mapMutations(['set_dialogVisible']),
     productDetail (id) {
-      console.log(id)
-    },
-    beforeClose (done) {
-      this.set_dialogVisible(false)
+      const product = this.productList.find(_ => _.id === id)
+      if (product) {
+        const { kind, sub, productName } = product
+        this.$router.push({ path: `/products/${kind}/${sub}/${productName}`, query: { id } })
+      }
     },
     pre (pro) {
       if (pro.activeIndex > 0) pro.activeIndex -= 1
@@ -273,7 +280,7 @@ export default {
     submitForm (formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.set_dialogVisible(false)
+          this.$store.commit('set_dialogVisible', false)
         } else {
           console.log('error submit!!')
           return false

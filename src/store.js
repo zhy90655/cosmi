@@ -13,7 +13,14 @@ export default new Vuex.Store({
     ],
     isLogin: true,
     showLogin: false,
-    dialogVisible: true
+    dialogVisible: true,
+    productList: [
+      { id: '0001', kind: 'eyes', sub: 'Primer', productName: 'PRODUCT NAME1' },
+      { id: '0002', kind: 'lips', sub: 'Lipgloss', productName: 'PRODUCT NAME2' },
+      { id: '0003', kind: 'face', sub: 'eyeshadows', productName: 'PRODUCT NAME3' },
+      { id: '0004', kind: 'hands', sub: 'french manicure', productName: 'PRODUCT NAME4' },
+      { id: '0005', kind: 'face', sub: 'nascaras', productName: 'PRODUCT NAME5' }
+    ]
   },
   mutations: {
     set_cartlist (state, n) {

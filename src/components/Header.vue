@@ -109,7 +109,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['cartlist', 'isLogin', 'showLogin']),
+    ...mapState(['cartlist', 'isLogin', 'showLogin', 'productList']),
     carCount () {
       let count = 0
       this.cartlist.forEach(_ => (count += _.count))
@@ -139,7 +139,11 @@ export default {
       }
     },
     productDetail (id) {
-      console.log(id)
+      const product = this.productList.find(_ => _.id === id)
+      if (product) {
+        const { kind, sub, productName } = product
+        this.$router.push({ path: `/products/${kind}/${sub}/${productName}`, query: { id } })
+      }
     },
     handleSelect (item) {
       console.log(item)
