@@ -1,8 +1,6 @@
 <template>
   <div>
-    <div class="main">
-      Subclass组件（展示子类）
-    </div>
+    Subclass组件（展示子类）
   </div>
 </template>
 <script>
