@@ -48,7 +48,7 @@ export default {
   methods: {
     querySearchAsync (queryString, cb) {
       const data = [
-        { 'value': '(小杨生煎)西郊百联餐厅', 'address': '长宁区仙霞西路88号百联2楼' },
+        { 'value': '(小杨生煎)西郊百联餐厅1111', 'address': '长宁区仙霞西路88号百联2楼' },
         { 'value': '阳阳麻辣烫', 'address': '天山西路389号' },
         { 'value': '南拳妈妈龙虾盖浇饭', 'address': '普陀区金沙江路1699号鑫乐惠美食广场A13' }
       ]

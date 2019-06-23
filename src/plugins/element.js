@@ -1,5 +1,6 @@
 import Vue from 'vue'
-import { Autocomplete, Badge, Row, Col, Button, Popover, InputNumber, Form, FormItem, Input, Dialog, Checkbox, Container, Aside, Main, Breadcrumb, BreadcrumbItem } from 'element-ui'
+import { Autocomplete, Badge, Row, Col, Button, Popover, InputNumber, Form, FormItem, Input, Pagination,
+  Dialog, Checkbox, Container, Aside, Main, Breadcrumb, BreadcrumbItem, Table, TableColumn } from 'element-ui'
 
 Vue.use(Autocomplete)
 Vue.use(Badge)
@@ -18,3 +19,6 @@ Vue.use(Aside)
 Vue.use(Main)
 Vue.use(Breadcrumb)
 Vue.use(BreadcrumbItem)
+Vue.use(Table)
+Vue.use(TableColumn)
+Vue.use(Pagination)
