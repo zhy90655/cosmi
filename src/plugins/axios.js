@@ -1,5 +1,4 @@
 import axios from 'axios'
-console.log(process.env)
 
 const service = axios.create({
   baseURL: process.env.VUE_APP_BASEURL,
@@ -8,7 +7,7 @@ const service = axios.create({
 
 // 请求拦截处理
 service.interceptors.request.use(config => {
-  config.headers.authorization = process.env.VUE_APP_TOKEN
+  config.headers.Authorization = process.env.VUE_APP_TOKEN
   return config
 })
 

@@ -1,9 +1,10 @@
 import service from './plugins/axios'
 
-export function test (data) {
+// 检验邮箱是否已经注册
+export function isEmailRegister (data) {
   return service({
-    url: 'dddd',
-    method: 'post',
+    url: 'mall/login/findUserIsRegister',
+    method: 'get',
     data
   })
 }
