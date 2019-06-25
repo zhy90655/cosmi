@@ -3,7 +3,9 @@
     <div class="shipping">
       <div class="title">
         <img src="../../assets/images/person/product.png">Shipping Address
-         <el-button round style="float:right;"><i class="el-icon-plus"></i>ADD</el-button>
+        <el-button round style="float:right;">
+          <i class="el-icon-plus"></i>ADD
+        </el-button>
       </div>
       <div class="item">
         <el-table
@@ -31,7 +33,9 @@
     <div class="shipping" style="margin-top:48px">
       <div class="title">
         <img src="../../assets/images/person/bill.png">Billing Address
-        <el-button round style="float:right;"><i class="el-icon-plus"></i>ADD</el-button>
+        <el-button round style="float:right;">
+          <i class="el-icon-plus"></i>ADD
+        </el-button>
       </div>
       <div class="item">
         <el-table
@@ -80,6 +84,9 @@ export default {
         }
       ]
     }
+  },
+  created: {
+
   }
 }
 </script>
