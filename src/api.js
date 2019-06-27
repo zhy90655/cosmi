@@ -8,3 +8,11 @@ export function isEmailRegister (data) {
     data
   })
 }
+
+export function login (data) {
+  return service({
+    url: 'mall/login/land',
+    method: 'post',
+    data
+  })
+}
