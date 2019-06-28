@@ -76,17 +76,19 @@ export default {
   },
   methods: {
     ...mapMutations(['set_login']),
-    ...mapActions(['loginController']),
+    ...mapActions(['loginController', 'UserRegister']),
     submitForm (formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          // if (this.showConfirm) {
-
-          // }
-          console.log('valid:', valid, this.ruleForm)
-          this.loginController({ ...this.ruleForm })
-
-          this.set_login(true)
+          if (!this.showConfirm) {
+            this.loginController({ ...this.ruleForm }).then(() => {
+              this.set_login(true)
+            })
+          } else {
+            this.UserRegister({ ...this.ruleForm }).then(() => {
+              this.set_login(true)
+            })
+          }
         } else {
           console.log('error submit!!')
           return false

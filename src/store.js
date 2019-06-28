@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import { login } from './api'
+import { login, register, address, deleteAddress } from './api'
 // import { fail } from 'assert'
 
 Vue.use(Vuex)
@@ -86,9 +86,23 @@ export default new Vuex.Store({
     }
   },
   actions: {
-    loginController (data) {
-      debugger
+    loginController (content, data) {
       login(data).then(res => {
+        console.log('success')
+      })
+    },
+    UserRegister (content, data) {
+      register(data).then(res => {
+        console.log('success')
+      })
+    },
+    getAddress (content, data) {
+      address(data).then(res => {
+        console.log('success')
+      })
+    },
+    delectedAddress (content, data) {
+      deleteAddress(data).then(res => {
         console.log('success')
       })
     }

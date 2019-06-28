@@ -1,6 +1,29 @@
 import Vue from 'vue'
-import { Autocomplete, Badge, Row, Col, Button, Popover, InputNumber, Form, FormItem, Input, Pagination,
-  Dialog, Checkbox, Container, Aside, Main, Breadcrumb, BreadcrumbItem, Table, TableColumn } from 'element-ui'
+import {
+  Autocomplete,
+  Badge,
+  Row,
+  Col,
+  Button,
+  Popover,
+  InputNumber,
+  Form,
+  FormItem,
+  Input,
+  Pagination,
+  Dialog,
+  Checkbox,
+  Container,
+  Aside,
+  Main,
+  Breadcrumb,
+  BreadcrumbItem,
+  Table,
+  TableColumn,
+  Select,
+  MessageBox,
+  Message
+} from 'element-ui'
 
 Vue.use(Autocomplete)
 Vue.use(Badge)
@@ -22,3 +45,8 @@ Vue.use(BreadcrumbItem)
 Vue.use(Table)
 Vue.use(TableColumn)
 Vue.use(Pagination)
+Vue.use(Select)
+
+Vue.prototype.$msgbox = MessageBox
+Vue.prototype.$message = Message
+Vue.prototype.$confirm = MessageBox.confirm

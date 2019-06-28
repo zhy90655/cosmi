@@ -20,7 +20,10 @@
             <template slot-scope="scope">
               <div class="edit">
                 <img src="../../assets/images/person/edit.png">
-                <img src="../../assets/images/person/trashcan.png">
+                <img
+                  @click="deleteTheAddress(scope.row.id)"
+                  src="../../assets/images/person/trashcan.png"
+                >
               </div>
               <div
                 class="address-state"
@@ -63,7 +66,7 @@
   </div>
 </template>
 <script>
-
+import { mapActions } from 'vuex'
 export default {
   data () {
     return {
@@ -85,8 +88,32 @@ export default {
       ]
     }
   },
-  created: {
-
+  created () {
+    this.getAddress()
+  },
+  methods: {
+    ...mapActions(['getAddress', 'delectedAddress']),
+    deleteTheAddress (id) {
+      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+        .then(() => {
+          this.delectedAddress(id).then(() => {
+            this.$message({
+              type: 'success',
+              message: '删除成功!'
+            })
+          })
+        })
+        .catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          })
+        })
+    }
   }
 }
 </script>

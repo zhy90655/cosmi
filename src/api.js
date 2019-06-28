@@ -11,8 +11,33 @@ export function isEmailRegister (data) {
 
 export function login (data) {
   return service({
-    url: 'mall/login/land',
+    url: '/login/land',
     method: 'post',
+    data
+  })
+}
+
+export function register (data) {
+  return service({
+    url: '/login/register',
+    method: 'post',
+    data
+  })
+}
+
+// 地址模块
+export function address (data) {
+  return service({
+    url: 'users/getUserInfo', // '/address/getAddress',
+    method: 'get',
+    data
+  })
+}
+
+export function deleteAddress (data) {
+  return service({
+    url: '/address/deleteById',
+    method: 'delete',
     data
   })
 }

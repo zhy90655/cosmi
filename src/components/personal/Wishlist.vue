@@ -44,6 +44,7 @@ export default {
   },
   computed: {
     ...mapState(['cartlist']),
+    // ...mapActions([]),
     total () {
       let total = { counts: 0, subtotal: 0 }
       this.cartlist.forEach(_ => {
@@ -52,6 +53,9 @@ export default {
       })
       return total
     }
+  },
+  created: {
+
   },
   methods: {
     changeSelectedDate (val) {

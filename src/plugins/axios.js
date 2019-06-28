@@ -7,7 +7,7 @@ const service = axios.create({
 
 // 请求拦截处理
 service.interceptors.request.use(config => {
-  config.headers.Authorization = process.env.VUE_APP_TOKEN
+  // config.headers.Authorization = process.env.VUE_APP_TOKEN
   return config
 })
 
