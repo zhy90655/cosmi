@@ -2,7 +2,8 @@ import axios from 'axios'
 
 const service = axios.create({
   baseURL: process.env.VUE_APP_BASEURL,
-  timeout: 30000
+  timeout: 30000,
+  withCredentials: true
 })
 
 // 请求拦截处理

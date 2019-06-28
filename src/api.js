@@ -28,7 +28,7 @@ export function register (data) {
 // 地址模块
 export function address (data) {
   return service({
-    url: 'users/getUserInfo', // '/address/getAddress',
+    url: '/address/getAddress', // '/address/getAddress',
     method: 'get',
     data
   })

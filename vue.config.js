@@ -8,5 +8,8 @@ module.exports = {
         options.fix = true
         return options
       })
+  },
+  devServer: {
+    disableHostCheck: true
   }
 }

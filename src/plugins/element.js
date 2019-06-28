@@ -1,28 +1,7 @@
 import Vue from 'vue'
-import {
-  Autocomplete,
-  Badge,
-  Row,
-  Col,
-  Button,
-  Popover,
-  InputNumber,
-  Form,
-  FormItem,
-  Input,
-  Pagination,
-  Dialog,
-  Checkbox,
-  Container,
-  Aside,
-  Main,
-  Breadcrumb,
-  BreadcrumbItem,
-  Table,
-  TableColumn,
-  Select,
-  MessageBox,
-  Message
+import { Autocomplete, Badge, Row, Col, Button, Popover, InputNumber, Form, FormItem, Input, Pagination,
+  Dialog, Checkbox, Container, Aside, Main, Breadcrumb, BreadcrumbItem, Table, TableColumn, Select, MessageBox,
+  Message, Option, DatePicker, TimePicker, Switch, CheckboxGroup, Radio, RadioGroup
 } from 'element-ui'
 
 Vue.use(Autocomplete)
@@ -46,6 +25,13 @@ Vue.use(Table)
 Vue.use(TableColumn)
 Vue.use(Pagination)
 Vue.use(Select)
+Vue.use(Option)
+Vue.use(DatePicker)
+Vue.use(TimePicker)
+Vue.use(Switch)
+Vue.use(CheckboxGroup)
+Vue.use(Radio)
+Vue.use(RadioGroup)
 
 Vue.prototype.$msgbox = MessageBox
 Vue.prototype.$message = Message

@@ -1,7 +1,7 @@
 <template>
   <div class="shipping-wrap" style="width:830px">
     <div class="shipping">
-      <div class="title">
+      <div class="person-center-title">
         <img src="../../assets/images/person/product.png">Shipping Address
         <el-button round style="float:right;">
           <i class="el-icon-plus"></i>ADD
@@ -121,16 +121,6 @@ export default {
 .shipping-wrap {
   margin-top: 32px;
   .shipping {
-    .title {
-      font-size: 16px;
-      line-height: 52px;
-      margin-top: 12px;
-      font-weight: 600;
-      > img {
-        margin-right: 10px;
-        vertical-align: middle;
-      }
-    }
     .item {
       .edit {
         > img:first-child {
