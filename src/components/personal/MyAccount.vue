@@ -3,7 +3,7 @@
     <div class="title">
       <img src="../../assets/images/person/person.png" />Connnect Account
     </div>
-    <el-form ref="form" :model="form" label-width="160px">
+    <el-form ref="form" :model="form" label-width="180px">
       <el-form-item label="First Name">
         <el-input v-model="form.firstName"></el-input>
       </el-form-item>
@@ -16,15 +16,15 @@
       </el-form-item>
       <el-form-item label="Birthday">
         <el-col :span="4">
-          <el-input v-model.number="form.year" placeholder="请输入内容"></el-input>
+          <el-input v-model.number="form.year"></el-input>
         </el-col>
         <el-col class="el-form--label-left cosmi-datastyle" :span="4">Year</el-col>
         <el-col :span="4">
-          <el-input v-model.number="form.month" placeholder="请输入内容"></el-input>
+          <el-input v-model.number="form.month"></el-input>
         </el-col>
         <el-col class="el-form--label-left cosmi-datastyle" :span="4">Month</el-col>
         <el-col :span="4">
-          <el-input v-model.number="form.day" placeholder="请输入内容"></el-input>
+          <el-input v-model.number="form.day"></el-input>
         </el-col>
         <el-col class="el-form--label-left cosmi-datastyle" :span="4">Day</el-col>
       </el-form-item>

@@ -13,13 +13,15 @@
           :data="shippingAddress"
           style="width: 830px"
         >
-          <el-table-column prop="name" label="NAME" width="180" align="center"></el-table-column>
+          <el-table-column label="NAME" width="180" align="center">
+            <template slot-scope="scope">{{scope.row.firstName+' '+scope.row.lastName}}</template>
+          </el-table-column>
           <el-table-column prop="address" label="ADDRESS" width="340" align="center"></el-table-column>
           <el-table-column prop="phone" label="PHONE" align="center"></el-table-column>
           <el-table-column align="center">
             <template slot-scope="scope">
-              <div class="edit" @click="editTheAddress(scope.row)">
-                <img src="../../assets/images/person/edit.png" />
+              <div class="edit">
+                <img @click="editTheAddress(scope.row)" src="../../assets/images/person/edit.png" />
                 <img
                   @click="deleteTheAddress(scope.row.id)"
                   src="../../assets/images/person/trashcan.png"
@@ -36,7 +38,7 @@
     <div class="shipping" style="margin-top:48px">
       <div class="title person-center-title">
         <img src="../../assets/images/person/bill.png" />Billing Address
-        <el-button round style="float:right;">
+        <el-button round style="float:right;" @click="addAddressBtn(2)">
           <i class="el-icon-plus"></i>ADD
         </el-button>
       </div>
@@ -46,7 +48,9 @@
           :data="billAddress"
           style="width: 830px"
         >
-          <el-table-column prop="name" label="NAME" width="180" align="center"></el-table-column>
+          <el-table-column label="NAME" width="180" align="center">
+            <template slot-scope="scope">{{scope.row.firstName+' '+scope.row.lastName}}</template>
+          </el-table-column>
           <el-table-column prop="address" label="ADDRESS" width="340" align="center"></el-table-column>
           <el-table-column prop="phone" label="PHONE" align="center"></el-table-column>
           <el-table-column align="center">
@@ -70,26 +74,34 @@
       custom-class="add-address"
       :before-close="handleClose"
     >
-      <el-form :model="form"  ref="AddressForm">
+      <el-form :model="form" ref="AddressForm" :rules="rules">
         <el-form-item label="First Name" :label-width="formLabelWidth">
           <el-col :span="8">
-            <el-input v-model="form.firstName" auto-complete="off"></el-input>
+            <el-form-item prop="firstName">
+              <el-input v-model="form.firstName" auto-complete="off"></el-input>
+            </el-form-item>
           </el-col>
           <el-col class="el-form-item__label" :span="5">Last Name</el-col>
           <el-col :span="8">
-            <el-input v-model="form.lastName" auto-complete="off"></el-input>
+            <el-form-item prop="lastName">
+              <el-input v-model="form.lastName" auto-complete="off"></el-input>
+            </el-form-item>
           </el-col>
         </el-form-item>
         <el-form-item label="Country" :label-width="formLabelWidth">
           <el-col :span="8">
-            <el-input v-model="form.country" auto-complete="off"></el-input>
+            <el-form-item prop="country">
+              <el-input v-model="form.country" auto-complete="off"></el-input>
+            </el-form-item>
           </el-col>
           <el-col class="el-form-item__label" :span="5">City</el-col>
           <el-col :span="8">
-            <el-input v-model="form.city" auto-complete="off"></el-input>
+            <el-form-item prop="city">
+              <el-input v-model="form.city" auto-complete="off"></el-input>
+            </el-form-item>
           </el-col>
         </el-form-item>
-        <el-form-item label="address" :label-width="formLabelWidth">
+        <el-form-item label="address" :label-width="formLabelWidth" prop="address">
           <el-col :span="21">
             <el-input v-model="form.address" auto-complete="off"></el-input>
           </el-col>
@@ -101,23 +113,32 @@
         </el-form-item>
         <el-form-item label="Post Code" :label-width="formLabelWidth">
           <el-col :span="8">
-            <el-input v-model="form.mailingCode" auto-complete="off"></el-input>
+            <el-form-item prop="postCode">
+              <el-input v-model="form.postCode" auto-complete="off"></el-input>
+            </el-form-item>
           </el-col>
           <el-col class="el-form-item__label" :span="5">Telephone</el-col>
           <el-col :span="8">
-            <el-input v-model="form.phone" auto-complete="off"></el-input>
+            <el-form-item prop="phone">
+              <el-input v-model="form.phone" auto-complete="off"></el-input>
+            </el-form-item>
           </el-col>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="onSubmitAddress">确 定</el-button>
+        <el-checkbox
+          :checked="form.isDefault==='Y'"
+          @change="val => { form.isDefault = val?'Y':'N' }"
+        >Set the default address</el-checkbox>
+        <el-button type="primary" @click="onSubmitAddress">SAVE</el-button>
+        <el-button @click="handleClose">CANCEL</el-button>
       </div>
     </el-dialog>
   </div>
 </template>
 <script>
 import { mapActions, mapState } from 'vuex'
+import { updateAddress } from '../../api'
 export default {
   data () {
     return {
@@ -129,9 +150,37 @@ export default {
         country: '',
         city: '',
         address: '',
-        mailingCode: '',
+        postCode: '',
         phone: '',
-        addressType: 1
+        addressType: 1,
+        isDefault: 'N'
+      },
+      rules: {
+        firstName: [
+          {
+            required: true,
+            message: 'please enter First Name',
+            trigger: 'blur'
+          }
+        ],
+        lastName: [
+          { required: true, message: 'please enter Last Name', trigger: 'blur' }
+        ],
+        country: [
+          { required: true, message: 'please enter country', trigger: 'blur' }
+        ],
+        city: [
+          { required: true, message: 'please enter city', trigger: 'blur' }
+        ],
+        address: [
+          { required: true, message: 'please enter address', trigger: 'blur' }
+        ],
+        postCode: [
+          { required: true, message: 'please enter postCode', trigger: 'blur' }
+        ],
+        phone: [
+          { required: true, message: 'please enter phone', trigger: 'blur' }
+        ]
       }
     }
   },
@@ -176,19 +225,43 @@ export default {
       console.log('submit!')
     },
     handleClose () {
-      this.$refs['AddressForm'].resetFields()
       this.toPushAddress = false
+      this.$refs['AddressForm'].resetFields()
     },
     onSubmitAddress () {
-      // if (this.form.id) {
-
-      // } else {
-      this.addTheAddress(this.form, res => {
-        this.getAddress(this.form.addressType)
-        // console.log('res', res)
-        this.$refs['AddressForm'].resetFields()
-      })
-      // }
+      if (this.form.id) {
+        let {
+          id,
+          firstName,
+          lastName,
+          address,
+          city,
+          country,
+          isDefault,
+          postCode,
+          phone
+        } = this.form
+        let data = {
+          id,
+          firstName,
+          lastName,
+          address,
+          city,
+          country,
+          isDefault,
+          postCode,
+          phone
+        }
+        updateAddress(data).then(res => {
+          this.getAddress(this.form.addressType)
+        })
+      } else {
+        this.addTheAddress(this.form).then(res => {
+          this.getAddress(this.form.addressType)
+        })
+      }
+      this.toPushAddress = false
+      this.$refs['AddressForm'].resetFields()
     },
     addAddressBtn (addressType) {
       this.form.addressType = addressType
@@ -223,6 +296,13 @@ export default {
   }
   .add-address {
     padding: 0 26px;
+  }
+  .dialog-footer {
+    .el-checkbox {
+      position: absolute;
+      left: 20px;
+      font-size: 14px;
+    }
   }
 }
 </style>

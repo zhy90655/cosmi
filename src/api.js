@@ -52,3 +52,12 @@ export function addAddress (data) {
     data
   })
 }
+
+// 更新地址
+export function updateAddress (data) {
+  return service({
+    url: '/address/updateAddress',
+    method: 'post',
+    data
+  })
+}

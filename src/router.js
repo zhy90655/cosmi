@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Main from './views/Main.vue'
-import Store from './store'
+// import Store from './store'
 
 Vue.use(Router)
 
@@ -25,13 +25,13 @@ const router = new Router({
     }
   ]
 })
-router.beforeEach((to, from, next) => {
-  if (to.matched.some(record => record.meta.requiresLogin)) {
-    if (!Store.state.isLogin) {
-      Store.commit('setShowLogin', true)
-      next(false)
-    } else next()
-  } else next()
-})
+// router.beforeEach((to, from, next) => {
+//   if (to.matched.some(record => record.meta.requiresLogin)) {
+//     if (!Store.state.isLogin) {
+//       Store.commit('setShowLogin', true)
+//       next(false)
+//     } else next()
+//   } else next()
+// })
 
 export default router
