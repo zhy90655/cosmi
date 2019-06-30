@@ -9,6 +9,9 @@ module.exports = {
         return options
       })
   },
+  css: {
+    sourceMap: process.env.NODE_ENV === 'development'
+  },
   devServer: {
     disableHostCheck: true
   }
