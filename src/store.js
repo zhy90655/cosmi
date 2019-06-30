@@ -75,7 +75,9 @@ export default new Vuex.Store({
       sub: 'nascaras',
       productName: 'PRODUCT NAME5'
     }
-    ]
+    ],
+    shippingAddress: [],
+    billAddress: []
   },
   mutations: {
     set_cartlist (state, n) {
@@ -89,6 +91,12 @@ export default new Vuex.Store({
     },
     set_dialogVisible (state, n) {
       state.dialogVisible = n
+    },
+    set_address (state, n) {
+      state.shippingAddress = n
+    },
+    set_bill_address (state, n) {
+      state.billAddress = n
     }
   },
   actions: {
@@ -105,6 +113,13 @@ export default new Vuex.Store({
     getAddress (content, data) {
       address(data).then(res => {
         console.log('success', res)
+        if (res.success) {
+          if (data === 1) {
+            content.commit('set_address', res.data)
+          } else {
+            content.commit('set_bill_address', res.data)
+          }
+        }
       })
     },
     delectedAddress (content, data) {
@@ -117,7 +132,7 @@ export default new Vuex.Store({
         success && success(res)
       }).catch(error => {
         failed && failed(error)
-      })11
+      })
     }
   }
 })

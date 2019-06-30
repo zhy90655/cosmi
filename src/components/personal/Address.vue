@@ -2,15 +2,15 @@
   <div class="shipping-wrap" style="width:830px">
     <div class="shipping">
       <div class="person-center-title">
-        <img src="../../assets/images/person/product.png">Shipping Address
-        <el-button round style="float:right;" @click="toPushAddress = true">
+        <img src="../../assets/images/person/product.png" />Shipping Address
+        <el-button round style="float:right;" @click="addAddressBtn(1)">
           <i class="el-icon-plus"></i>ADD
         </el-button>
       </div>
       <div class="item">
         <el-table
           header-row-class-name="shipping-address-box"
-          :data="tableData"
+          :data="shippingAddress"
           style="width: 830px"
         >
           <el-table-column prop="name" label="NAME" width="180" align="center"></el-table-column>
@@ -18,12 +18,12 @@
           <el-table-column prop="phone" label="PHONE" align="center"></el-table-column>
           <el-table-column align="center">
             <template slot-scope="scope">
-              <div class="edit">
-                <img src="../../assets/images/person/edit.png">
+              <div class="edit" @click="editTheAddress(scope.row.id)">
+                <img src="../../assets/images/person/edit.png" />
                 <img
                   @click="deleteTheAddress(scope.row.id)"
                   src="../../assets/images/person/trashcan.png"
-                >
+                />
               </div>
               <div
                 class="address-state"
@@ -35,7 +35,7 @@
     </div>
     <div class="shipping" style="margin-top:48px">
       <div class="title person-center-title">
-        <img src="../../assets/images/person/bill.png">Billing Address
+        <img src="../../assets/images/person/bill.png" />Billing Address
         <el-button round style="float:right;">
           <i class="el-icon-plus"></i>ADD
         </el-button>
@@ -43,7 +43,7 @@
       <div class="item">
         <el-table
           header-row-class-name="shipping-address-box"
-          :data="tableData"
+          :data="billAddress"
           style="width: 830px"
         >
           <el-table-column prop="name" label="NAME" width="180" align="center"></el-table-column>
@@ -52,8 +52,8 @@
           <el-table-column align="center">
             <template slot-scope="scope">
               <div class="edit">
-                <img src="../../assets/images/person/edit.png">
-                <img src="../../assets/images/person/trashcan.png">
+                <img src="../../assets/images/person/edit.png" />
+                <img src="../../assets/images/person/trashcan.png" />
               </div>
               <div
                 class="address-state"
@@ -116,26 +116,10 @@
   </div>
 </template>
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 export default {
   data () {
     return {
-      tableData: [
-        {
-          name: 'Radient Boost',
-          address:
-            'Radient Boost Face Base Then To The Next line Boost Face Radient Boost Face Base Then To The Next line Boost Face',
-          phone: '0528-83662664',
-          state: '1'
-        },
-        {
-          name: 'Radient Boost',
-          address:
-            'Radient Boost Face Base Then To The Next line Boost Face Radient Boost Face Base Then To The Next line Boost Face',
-          phone: '0528-83662664',
-          state: '2'
-        }
-      ],
       toPushAddress: false,
       formLabelWidth: '120px',
       form: {
@@ -146,12 +130,18 @@ export default {
         address: '',
         mailingCode: '',
         phone: '',
-        addressType: '1'
+        addressType: 1
       }
     }
   },
   created () {
+    // 获取shipping地址
     this.getAddress(1)
+    // 获取bill地址
+    this.getAddress(2)
+  },
+  computed: {
+    ...mapState(['shippingAddress', 'billAddress'])
   },
   methods: {
     ...mapActions(['getAddress', 'delectedAddress', 'addTheAddress']),
@@ -186,9 +176,13 @@ export default {
     },
     onSubmitAddress () {
       this.addTheAddress(this.form, res => {
-        debugger
-        console.log('res', res)
+        this.getAddress(this.form.addressType)
+        // console.log('res', res)
       })
+    },
+    addAddressBtn (addressType) {
+      this.form.addressType = addressType
+      this.toPushAddress = true
     }
   }
 }
