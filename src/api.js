@@ -61,3 +61,21 @@ export function updateAddress (data) {
     data
   })
 }
+
+// 获取用户信息
+export function getUserInfo (data) {
+  return service({
+    url: '/users/getUserInfo',
+    method: 'get',
+    data
+  })
+}
+
+// 更新用户信息
+export function updateUserInfo (data) {
+  return service({
+    url: '/users/updateUserBaseInfo',
+    method: 'post',
+    data
+  })
+}

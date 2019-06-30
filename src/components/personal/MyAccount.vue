@@ -3,36 +3,59 @@
     <div class="title">
       <img src="../../assets/images/person/person.png" />Connnect Account
     </div>
-    <el-form ref="form" :model="form" label-width="180px">
-      <el-form-item label="First Name">
+    <el-form ref="userInfo" :rules="rules" :model="form" label-width="180px">
+      <el-form-item label="First Name" prop="firstName">
         <el-input v-model="form.firstName"></el-input>
       </el-form-item>
-      <el-form-item label="Last Name">
+      <el-form-item label="Last Name" prop="lastName">
         <el-input v-model="form.lastName"></el-input>
       </el-form-item>
-      <el-form-item label="Gender">
+      <el-form-item label="Gender" prop="gender">
         <el-radio v-model="form.gender" label="F">Female</el-radio>
         <el-radio v-model="form.gender" label="M">Male</el-radio>
       </el-form-item>
-      <el-form-item label="Birthday">
+      <el-form-item label="Birthday" required>
         <el-col :span="4">
-          <el-input v-model.number="form.year"></el-input>
+          <el-form-item prop="year">
+            <el-input v-model.number="form.year"></el-input>
+          </el-form-item>
         </el-col>
         <el-col class="el-form--label-left cosmi-datastyle" :span="4">Year</el-col>
         <el-col :span="4">
-          <el-input v-model.number="form.month"></el-input>
+          <el-form-item prop="month">
+            <el-input v-model.number="form.month"></el-input>
+          </el-form-item>
         </el-col>
         <el-col class="el-form--label-left cosmi-datastyle" :span="4">Month</el-col>
         <el-col :span="4">
-          <el-input v-model.number="form.day"></el-input>
+          <el-form-item prop="day">
+            <el-input v-model.number="form.day"></el-input>
+          </el-form-item>
         </el-col>
         <el-col class="el-form--label-left cosmi-datastyle" :span="4">Day</el-col>
       </el-form-item>
       <el-form-item label="Telephone Number">
         <el-input v-model.number="form.phone"></el-input>
       </el-form-item>
-      <el-form-item label="Subscription Mail">
-        <el-input v-model.number="form.phone"></el-input>
+      <el-form-item label="Subscription Mail" prop="email">
+        <el-input v-model.number="form.email"></el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" @click="onSubmit">SAVE</el-button>
+      </el-form-item>
+    </el-form>
+    <div class="title">
+      <img src="../../assets/images/person/password.png" />Change Password
+    </div>
+    <el-form ref="changePwd" :rules="rules" :model="form" label-width="180px">
+      <el-form-item label="Current Password" prop="firstName">
+        <el-input v-model="pwd.password"></el-input>
+      </el-form-item>
+      <el-form-item label="New Password" prop="lastName">
+        <el-input v-model="pwd.newPwd"></el-input>
+      </el-form-item>
+      <el-form-item label="Repeat New Password">
+        <el-input v-model.number="form.againPwd"></el-input>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="onSubmit">SAVE</el-button>
@@ -41,6 +64,7 @@
   </div>
 </template>
 <script>
+import { getUserInfo, updateUserInfo } from '../../api'
 export default {
   data () {
     return {
@@ -52,15 +76,74 @@ export default {
         month: '',
         day: '',
         phone: '',
-        type: [],
-        resource: '',
-        desc: ''
+        email: ''
+      },
+      pwd: {
+        password: '',
+        newPwd: '',
+        againPwd: ''
+
+      },
+      rules: {
+        firstName: [
+          {
+            required: true,
+            message: 'please enter first Name',
+            trigger: 'blur'
+          },
+          { min: 3, max: 50, message: '长度在 3 到 50 个字符', trigger: 'blur' }
+        ],
+        lastName: [
+          {
+            required: true,
+            message: 'please enter last Name',
+            trigger: 'blur'
+          },
+          { min: 3, max: 50, message: '长度在 3 到 50 个字符', trigger: 'blur' }
+        ],
+        gender: [
+          { required: true, message: '请选择活动资源', trigger: 'change' }
+        ],
+        year: [
+          { required: true, message: '年龄不能为空', trigger: 'blur' },
+          { type: 'number', message: '年龄必须为数字值' }
+        ],
+        month: [
+          { required: true, message: '年龄不能为空', trigger: 'blur' },
+          { type: 'number', message: '年龄必须为数字值' }
+        ],
+        day: [
+          { required: true, message: '年龄不能为空', trigger: 'blur' },
+          { type: 'number', message: '年龄必须为数字值' }
+        ],
+        email: [
+          { required: true, message: '请输入邮箱地址', trigger: 'blur' },
+          {
+            type: 'email',
+            message: '请输入正确的邮箱地址',
+            trigger: 'blur,change'
+          }
+        ]
       }
     }
   },
+  created () {
+    getUserInfo().then(res => {
+      if (res) {
+        this.form = res.data
+      }
+    })
+  },
   methods: {
     onSubmit () {
-      console.log('submit!')
+      this.$refs['userInfo'].validate(valid => {
+        if (valid) {
+          alert('submit!')
+        } else {
+          console.log('error submit!!')
+          return false
+        }
+      })
     }
   }
 }

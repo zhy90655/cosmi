@@ -21,7 +21,7 @@
           <el-table-column align="center">
             <template slot-scope="scope">
               <div class="edit">
-                <img @click="editTheAddress(scope.row)" src="../../assets/images/person/edit.png" />
+                <img @click="editTheAddress(scope.row,1)" src="../../assets/images/person/edit.png" />
                 <img
                   @click="deleteTheAddress(scope.row.id)"
                   src="../../assets/images/person/trashcan.png"
@@ -56,7 +56,7 @@
           <el-table-column align="center">
             <template slot-scope="scope">
               <div class="edit">
-                <img src="../../assets/images/person/edit.png" />
+                <img src="../../assets/images/person/edit.png" @click="editTheAddress(scope.row,2)" />
                 <img src="../../assets/images/person/trashcan.png" />
               </div>
               <div
@@ -76,55 +76,52 @@
     >
       <el-form :model="form" ref="AddressForm" :rules="rules">
         <el-form-item label="First Name" :label-width="formLabelWidth">
-          <el-col :span="8">
+          <el-col :span="9">
             <el-form-item prop="firstName">
               <el-input v-model="form.firstName" auto-complete="off"></el-input>
             </el-form-item>
           </el-col>
-          <el-col class="el-form-item__label" :span="5">Last Name</el-col>
-          <el-col :span="8">
+          <el-col class="el-form-item__label" :span="6">Last Name</el-col>
+          <el-col :span="9">
             <el-form-item prop="lastName">
               <el-input v-model="form.lastName" auto-complete="off"></el-input>
             </el-form-item>
           </el-col>
         </el-form-item>
         <el-form-item label="Country" :label-width="formLabelWidth">
-          <el-col :span="8">
+          <el-col :span="9">
             <el-form-item prop="country">
               <el-input v-model="form.country" auto-complete="off"></el-input>
             </el-form-item>
           </el-col>
-          <el-col class="el-form-item__label" :span="5">City</el-col>
-          <el-col :span="8">
+          <el-col class="el-form-item__label" :span="6">City</el-col>
+          <el-col :span="9">
             <el-form-item prop="city">
               <el-input v-model="form.city" auto-complete="off"></el-input>
             </el-form-item>
           </el-col>
         </el-form-item>
         <el-form-item label="address" :label-width="formLabelWidth" prop="address">
-          <el-col :span="21">
-            <el-input v-model="form.address" auto-complete="off"></el-input>
-          </el-col>
+          <el-input v-model="form.address" auto-complete="off"></el-input>
         </el-form-item>
         <el-form-item label=" " :label-width="formLabelWidth">
-          <el-col :span="21">
-            <el-input v-model="form.address" auto-complete="off"></el-input>
-          </el-col>
+          <el-input v-model="form.address" auto-complete="off"></el-input>
         </el-form-item>
         <el-form-item label="Post Code" :label-width="formLabelWidth">
-          <el-col :span="8">
+          <el-col :span="9">
             <el-form-item prop="postCode">
               <el-input v-model="form.postCode" auto-complete="off"></el-input>
             </el-form-item>
           </el-col>
-          <el-col class="el-form-item__label" :span="5">Telephone</el-col>
-          <el-col :span="8">
+          <el-col class="el-form-item__label" :span="6">Telephone</el-col>
+          <el-col :span="9">
             <el-form-item prop="phone">
               <el-input v-model="form.phone" auto-complete="off"></el-input>
             </el-form-item>
           </el-col>
         </el-form-item>
       </el-form>
+
       <div slot="footer" class="dialog-footer">
         <el-checkbox
           :checked="form.isDefault==='Y'"
@@ -201,24 +198,27 @@ export default {
         "If you delete this address,you can't find it again",
         'Are you sure to delete this address?',
         {
-          confirmButtonText: 'Cancel',
-          cancelButtonText: 'Delete',
+          confirmButtonText: 'Delete',
+          cancelButtonText: 'Cancel',
+          confirmButtonClass: 'address-delete-Btn',
+          cancelButtonClass: 'close-address-delete',
           customClass: 'cosmi-warn',
           type: 'warning'
         }
       )
         .then(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消删除'
-          })
-        })
-        .catch(() => {
           this.delectedAddress(id).then(() => {
             this.$message({
               type: 'success',
               message: '删除成功!'
             })
+            this.getAddress(this.form.addressType)
+          })
+        })
+        .catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
           })
         })
     },
@@ -230,46 +230,53 @@ export default {
       this.$refs['AddressForm'].resetFields()
     },
     onSubmitAddress () {
-      if (this.isEdit) {
-        let {
-          id,
-          firstName,
-          lastName,
-          address,
-          city,
-          country,
-          isDefault,
-          postCode,
-          phone
-        } = this.form
-        let data = {
-          id,
-          firstName,
-          lastName,
-          address,
-          city,
-          country,
-          isDefault,
-          postCode,
-          phone
-        }
-        updateAddress(data).then(res => {
-          this.getAddress(this.form.addressType)
-        })
-      } else {
-        this.addTheAddress(this.form).then(res => {
-          this.getAddress(this.form.addressType)
-        })
+      let {
+        id,
+        firstName,
+        lastName,
+        address,
+        city,
+        country,
+        isDefault,
+        postCode,
+        phone
+      } = this.form
+      let data = {
+        id,
+        firstName,
+        lastName,
+        address,
+        city,
+        country,
+        isDefault,
+        postCode,
+        phone
       }
-      this.toPushAddress = false
-      this.$refs['AddressForm'].resetFields()
+      this.$refs['AddressForm'].validate(valid => {
+        if (valid) {
+          if (this.isEdit) {
+            updateAddress(data).then(res => {
+              this.getAddress(this.form.addressType)
+            })
+          } else {
+            this.addTheAddress(data).then(res => {
+              this.getAddress(this.form.addressType)
+            })
+          }
+          this.toPushAddress = false
+          this.$refs['AddressForm'].resetFields()
+        } else {
+          console.log('error submit!!')
+          return false
+        }
+      })
     },
     addAddressBtn (addressType) {
       this.isEdit = false
       this.form.addressType = addressType
       this.toPushAddress = true
     },
-    editTheAddress (item) {
+    editTheAddress (item, addressType) {
       this.form = item
       this.isEdit = true
       this.toPushAddress = true
@@ -300,11 +307,21 @@ export default {
   .add-address {
     padding: 0 26px;
   }
+  .el-dialog__body {
+    padding: 30px 26px;
+  }
   .dialog-footer {
     .el-checkbox {
       position: absolute;
       left: 20px;
       font-size: 14px;
+      height: 40px;
+      line-height: 40px;
+    }
+    .el-button--primary {
+      width: 108px;
+      color: #fff;
+      background-color: #000000;
     }
   }
 }
