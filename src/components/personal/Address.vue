@@ -144,6 +144,7 @@ export default {
     return {
       toPushAddress: false,
       formLabelWidth: '120px',
+      isEdit: false,
       form: {
         firstName: '',
         lastName: '',
@@ -229,7 +230,7 @@ export default {
       this.$refs['AddressForm'].resetFields()
     },
     onSubmitAddress () {
-      if (this.form.id) {
+      if (this.isEdit) {
         let {
           id,
           firstName,
@@ -264,11 +265,13 @@ export default {
       this.$refs['AddressForm'].resetFields()
     },
     addAddressBtn (addressType) {
+      this.isEdit = false
       this.form.addressType = addressType
       this.toPushAddress = true
     },
     editTheAddress (item) {
       this.form = item
+      this.isEdit = true
       this.toPushAddress = true
     }
   }
