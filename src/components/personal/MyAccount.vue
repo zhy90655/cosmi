@@ -47,18 +47,18 @@
     <div class="title">
       <img src="../../assets/images/person/password.png" />Change Password
     </div>
-    <el-form ref="changePwd" :rules="rules" :model="form" label-width="180px">
-      <el-form-item label="Current Password" prop="firstName">
+    <el-form ref="changePwd" :rules="rules" :model="form" label-width="210px">
+      <el-form-item label="Current Password" prop="password">
         <el-input v-model="pwd.password"></el-input>
       </el-form-item>
       <el-form-item label="New Password" prop="lastName">
         <el-input v-model="pwd.newPwd"></el-input>
       </el-form-item>
-      <el-form-item label="Repeat New Password">
+      <el-form-item label="Repeat New Password" prop="againPwd">
         <el-input v-model.number="form.againPwd"></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="onSubmit">SAVE</el-button>
+        <el-button type="primary" @click="onSubmitPwd">SAVE</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -82,7 +82,6 @@ export default {
         password: '',
         newPwd: '',
         againPwd: ''
-
       },
       rules: {
         firstName: [
@@ -123,6 +122,15 @@ export default {
             message: '请输入正确的邮箱地址',
             trigger: 'blur,change'
           }
+        ],
+        password: [
+          { required: true, message: '请选择活动资源', trigger: 'blur' }
+        ],
+        newPwd: [
+          { required: true, message: '请选择活动资源', trigger: 'blur' }
+        ],
+        againPwd: [
+          { required: true, message: '请选择活动资源', trigger: 'blur' }
         ]
       }
     }
@@ -138,7 +146,19 @@ export default {
     onSubmit () {
       this.$refs['userInfo'].validate(valid => {
         if (valid) {
-          alert('submit!')
+          // alert('submit!')
+          updateUserInfo(this.form)
+        } else {
+          console.log('error submit!!')
+          return false
+        }
+      })
+    },
+    onSubmitPwd () {
+      this.$refs['changePwd'].validate(valid => {
+        if (valid) {
+          alert('pwdsubmit!')
+          // updateUserInfo(this.form)
         } else {
           console.log('error submit!!')
           return false
