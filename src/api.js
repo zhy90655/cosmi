@@ -9,6 +9,7 @@ export function isEmailRegister (data) {
   })
 }
 
+// 登录接口
 export function login (data) {
   return service({
     url: '/login/land',
@@ -17,6 +18,7 @@ export function login (data) {
   })
 }
 
+// 注册接口
 export function register (data) {
   return service({
     url: '/login/register',
@@ -33,6 +35,7 @@ export function address (addressType) {
   })
 }
 
+// 删除地址
 export function deleteAddress (id) {
   return service({
     url: '/address/deleteById?id=' + id,
@@ -41,6 +44,7 @@ export function deleteAddress (id) {
   })
 }
 
+// 新增地址
 export function addAddress (data) {
   return service({
     url: '/address/addAddress',

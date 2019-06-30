@@ -34,14 +34,15 @@
 </template>
 
 <script>
-import { mapMutations, mapActions } from 'vuex'
+import { mapMutations } from 'vuex'
+import { login, register } from '../api'
 export default {
   data () {
     return {
       showConfirm: false,
       ruleForm: {
-        email: '',
-        password: '',
+        email: '540383953@qq.com',
+        password: '540383953',
         confirmPassword: ''
       },
       rules: {
@@ -75,18 +76,19 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(['set_login']),
-    ...mapActions(['loginController', 'UserRegister']),
+    ...mapMutations(['setLogin', 'setShowLogin']),
     submitForm (formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
           if (!this.showConfirm) {
-            this.loginController({ ...this.ruleForm }).then(() => {
-              this.set_login(true)
+            login(this.ruleForm).then(() => {
+              this.setLogin(true)
+              this.setShowLogin(false)
             })
           } else {
-            this.UserRegister({ ...this.ruleForm }).then(() => {
-              this.set_login(true)
+            register(this.ruleForm).then(() => {
+              this.setLogin(true)
+              this.setShowLogin(false)
             })
           }
         } else {

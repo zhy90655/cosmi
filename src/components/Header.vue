@@ -26,7 +26,7 @@
           :width="centerPopoverInfo.width"
           :offset='centerPopoverInfo.offset'
           popper-class='head pop-center'
-          v-model="center"
+          v-model="showCenter"
           trigger="hover">
           <login v-if="!isLogin"></login>
           <ul class="personal" v-else>
@@ -83,7 +83,6 @@ export default {
     return {
       navList: ['HOME', 'MAKEUP', 'NEWS'],
       keyword: '',
-      center: false,
       details: {
         new: { img: '/static/images/header/pro.png', id: '0001', name: 'NEW CRUSHED LIQUD COLOR', descr: 'This is the product description,We can add it no more than 3 liness.No more, no more' },
         EYES: ['Primer', 'Eyeshadows', 'Eye pencils', 'Nascaras', 'Eyeliners', 'Eyebrows'],
@@ -95,15 +94,6 @@ export default {
     }
   },
   watch: {
-    isLogin (v) {
-      if (v) this.center = false
-    },
-    showLogin (v) {
-      if (v) this.center = v
-    },
-    center (v) {
-      if (!v) this.set_showLogin(false)
-    },
     $route () {
       this.$refs.detail.classList.remove('show')
     }
@@ -117,10 +107,18 @@ export default {
     },
     centerPopoverInfo () {
       return this.isLogin ? { width: 146, offset: 0 } : { width: 366, offset: -98 }
+    },
+    showCenter: {
+      get () {
+        return this.showLogin
+      },
+      set (value) {
+        this.setShowLogin(value)
+      }
     }
   },
   methods: {
-    ...mapMutations(['set_login', 'set_showLogin']),
+    ...mapMutations(['setLogin', 'setShowLogin']),
     querySearchAsync (queryString, cb) {
       const data = [
         { 'value': '(小杨生煎)西郊百联餐厅', 'address': '长宁区仙霞西路88号百联2楼' },
@@ -134,8 +132,8 @@ export default {
       if (params) this.$router.push('/personalCenter/' + params)
       else {
         console.log('logout')
-        this.set_login(false)
-        this.center = false
+        this.setLogin(false)
+        this.setShowLogin(false)
       }
     },
     productDetail (id) {

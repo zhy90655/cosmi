@@ -28,7 +28,7 @@ const router = new Router({
 router.beforeEach((to, from, next) => {
   if (to.matched.some(record => record.meta.requiresLogin)) {
     if (!Store.state.isLogin) {
-      Store.commit('set_showLogin', true)
+      Store.commit('setShowLogin', true)
       next(false)
     } else next()
   } else next()
