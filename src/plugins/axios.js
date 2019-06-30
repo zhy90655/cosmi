@@ -15,11 +15,11 @@ service.interceptors.request.use(config => {
 // 响应拦截处理 可以进行统一的错误预处理之类的的东西
 service.interceptors.response.use(response => {
   // console.log(response)
-  const data = response.data
-  if (data.code !== 200) {
-    console.warn(data.message)
-  }
-  return data
+  // const data = response.data
+  // if (data.code !== 200) {
+  //   console.warn(data.message)
+  // }
+  return response.data
 })
 
 export default service

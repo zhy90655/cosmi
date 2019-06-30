@@ -1,8 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import {
-  login,
-  register,
   address,
   deleteAddress,
   addAddress
@@ -42,7 +40,7 @@ export default new Vuex.Store({
       id: '0008'
     }
     ],
-    isLogin: true,
+    isLogin: false,
     showLogin: false,
     dialogVisible: true,
     productList: [{
@@ -80,44 +78,33 @@ export default new Vuex.Store({
     billAddress: []
   },
   mutations: {
-    set_cartlist (state, n) {
+    setCartlist (state, n) {
       state.cartlist = n
     },
-    set_login (state, n) {
+    setLogin (state, n) {
       state.isLogin = n
     },
-    set_showLogin (state, n) {
+    setShowLogin (state, n) {
       state.showLogin = n
     },
-    set_dialogVisible (state, n) {
+    setDialogVisible (state, n) {
       state.dialogVisible = n
     },
-    set_address (state, n) {
+    setAddress (state, n) {
       state.shippingAddress = n
     },
-    set_bill_address (state, n) {
+    setBillAddress (state, n) {
       state.billAddress = n
     }
   },
   actions: {
-    loginController (content, data) {
-      login(data).then(res => {
-        console.log('success')
-      })
-    },
-    UserRegister (content, data) {
-      register(data).then(res => {
-        console.log('success', res)
-      })
-    },
     getAddress (content, data) {
       address(data).then(res => {
-        console.log('success', res)
         if (res.success) {
           if (data === 1) {
-            content.commit('set_address', res.data)
+            content.commit('setAddress', res.data)
           } else {
-            content.commit('set_bill_address', res.data)
+            content.commit('setBillAddress', res.data)
           }
         }
       })

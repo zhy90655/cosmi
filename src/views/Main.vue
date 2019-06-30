@@ -95,7 +95,7 @@
       custom-class='discount'>
       <div class="discountInfo">
         <p class="tip">Subsctibe to get 10% off your fist order.</p>
-        <el-form model="discountForm" :rules="rules" label-position="top" ref="discountForm" label-width="100px" class="discountForm cosmi-form">
+        <el-form :model="discountForm" :rules="rules" label-position="top" ref="discountForm" label-width="100px" class="discountForm cosmi-form">
           <el-form-item label="Email" prop="email">
             <el-input v-model="discountForm.email"></el-input>
           </el-form-item>
@@ -209,7 +209,7 @@ export default {
         return this.$store.state.dialogVisible
       },
       set (val) {
-        this.$store.commit('set_dialogVisible', val)
+        this.$store.commit('setDialogVisible', val)
       }
     }
   },
@@ -280,7 +280,7 @@ export default {
     submitForm (formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.$store.commit('set_dialogVisible', false)
+          this.$store.commit('setDialogVisible', false)
         } else {
           console.log('error submit!!')
           return false
