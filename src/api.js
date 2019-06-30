@@ -26,11 +26,10 @@ export function register (data) {
 }
 
 // 地址模块
-export function address (data) {
+export function address (addressType) {
   return service({
-    url: '/address/getAddress', // '/address/getAddress',
-    method: 'get',
-    data
+    url: '/address/getAddress?addressType=' + addressType, // '/address/getAddress',
+    method: 'get'
   })
 }
 
@@ -38,6 +37,14 @@ export function deleteAddress (data) {
   return service({
     url: '/address/deleteById',
     method: 'delete',
+    data
+  })
+}
+
+export function addAddress (data) {
+  return service({
+    url: '/address/addAddress',
+    method: 'post',
     data
   })
 }

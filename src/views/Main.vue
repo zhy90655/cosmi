@@ -95,7 +95,7 @@
       custom-class='discount'>
       <div class="discountInfo">
         <p class="tip">Subsctibe to get 10% off your fist order.</p>
-        <el-form :model="discountForm" :rules="rules" label-position="top" ref="discountForm" label-width="100px" class="discountForm">
+        <el-form model="discountForm" :rules="rules" label-position="top" ref="discountForm" label-width="100px" class="discountForm cosmi-form">
           <el-form-item label="Email" prop="email">
             <el-input v-model="discountForm.email"></el-input>
           </el-form-item>
@@ -665,6 +665,8 @@ export default {
     .el-button--primary {
       font-size: 18px;
       width: 244px;
+      border-radius:0;
+      background-color: #232323;
     }
     .el-checkbox__input {
       transform: translateY(-34px);

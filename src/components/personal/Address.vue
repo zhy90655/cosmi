@@ -3,7 +3,7 @@
     <div class="shipping">
       <div class="person-center-title">
         <img src="../../assets/images/person/product.png">Shipping Address
-        <el-button round style="float:right;">
+        <el-button round style="float:right;" @click="toPushAddress = true">
           <i class="el-icon-plus"></i>ADD
         </el-button>
       </div>
@@ -34,7 +34,7 @@
       </div>
     </div>
     <div class="shipping" style="margin-top:48px">
-      <div class="title">
+      <div class="title person-center-title">
         <img src="../../assets/images/person/bill.png">Billing Address
         <el-button round style="float:right;">
           <i class="el-icon-plus"></i>ADD
@@ -63,6 +63,56 @@
         </el-table>
       </div>
     </div>
+    <el-dialog
+      title="Add Address"
+      :visible.sync="toPushAddress"
+      width="40%"
+      custom-class="add-address"
+    >
+      <el-form :model="form">
+        <el-form-item label="First Name" :label-width="formLabelWidth">
+          <el-col :span="8">
+            <el-input v-model="form.firstName" auto-complete="off"></el-input>
+          </el-col>
+          <el-col class="el-form-item__label" :span="5">Last Name</el-col>
+          <el-col :span="8">
+            <el-input v-model="form.lastName" auto-complete="off"></el-input>
+          </el-col>
+        </el-form-item>
+        <el-form-item label="Country" :label-width="formLabelWidth">
+          <el-col :span="8">
+            <el-input v-model="form.country" auto-complete="off"></el-input>
+          </el-col>
+          <el-col class="el-form-item__label" :span="5">City</el-col>
+          <el-col :span="8">
+            <el-input v-model="form.city" auto-complete="off"></el-input>
+          </el-col>
+        </el-form-item>
+        <el-form-item label="address" :label-width="formLabelWidth">
+          <el-col :span="21">
+            <el-input v-model="form.address" auto-complete="off"></el-input>
+          </el-col>
+        </el-form-item>
+        <el-form-item label=" " :label-width="formLabelWidth">
+          <el-col :span="21">
+            <el-input v-model="form.address" auto-complete="off"></el-input>
+          </el-col>
+        </el-form-item>
+        <el-form-item label="Post Code" :label-width="formLabelWidth">
+          <el-col :span="8">
+            <el-input v-model="form.mailingCode" auto-complete="off"></el-input>
+          </el-col>
+          <el-col class="el-form-item__label" :span="5">Telephone</el-col>
+          <el-col :span="8">
+            <el-input v-model="form.phone" auto-complete="off"></el-input>
+          </el-col>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="onSubmitAddress">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -85,20 +135,37 @@ export default {
           phone: '0528-83662664',
           state: '2'
         }
-      ]
+      ],
+      toPushAddress: false,
+      formLabelWidth: '120px',
+      form: {
+        firstName: '',
+        lastName: '',
+        country: '',
+        city: '',
+        address: '',
+        mailingCode: '',
+        phone: '',
+        addressType: '1'
+      }
     }
   },
   created () {
-    this.getAddress()
+    this.getAddress(1)
   },
   methods: {
-    ...mapActions(['getAddress', 'delectedAddress']),
+    ...mapActions(['getAddress', 'delectedAddress', 'addTheAddress']),
     deleteTheAddress (id) {
-      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      })
+      this.$confirm(
+        "If you delete this address,you can't find it again",
+        'Are you sure to delete this address?',
+        {
+          confirmButtonText: 'Cancel',
+          cancelButtonText: 'Delete',
+          customClass: 'cosmi-warn',
+          type: 'warning'
+        }
+      )
         .then(() => {
           this.delectedAddress(id).then(() => {
             this.$message({
@@ -113,6 +180,15 @@ export default {
             message: '已取消删除'
           })
         })
+    },
+    onSubmit () {
+      console.log('submit!')
+    },
+    onSubmitAddress () {
+      this.addTheAddress(this.form, res => {
+        debugger
+        console.log('res', res)
+      })
     }
   }
 }
@@ -137,13 +213,8 @@ export default {
       }
     }
   }
-}
-</style>
-<style lang="less">
-.shipping-address-box {
-  background-color: #fff4e8 !important;
-  > th {
-    background-color: #fff4e8 !important;
+  .add-address {
+    padding: 0 26px;
   }
 }
 </style>

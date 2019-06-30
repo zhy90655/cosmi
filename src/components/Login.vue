@@ -18,7 +18,7 @@
       <el-input v-model="ruleForm.confirmPassword" type="password"></el-input>
     </el-form-item>
     <el-form-item style="text-align: center;margin-top:-2px">
-      <el-button
+      <el-button class="cosmi-button"
         type="primary"
         @click="submitForm('loginForm')"
       >{{showConfirm ? 'REGISTER' : 'LOGIN'}}</el-button>
@@ -28,7 +28,7 @@
       style="margin-top:32px"
       class="change"
     >
-      <el-button type="primary" @click="change">{{showConfirm ? 'LOGIN' : 'REGISTER'}}</el-button>
+      <el-button class="cosmi-button" type="primary" @click="change">{{showConfirm ? 'LOGIN' : 'REGISTER'}}</el-button>
     </el-form-item>
   </el-form>
 </template>
@@ -131,7 +131,7 @@ export default {
       color: #fff;
     }
     .el-button--primary {
-      background-color: #fff;
+      background-color: #fff !important;
       color: #151515;
     }
   }

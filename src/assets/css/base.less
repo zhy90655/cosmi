@@ -13,11 +13,22 @@ table { border-collapse:collapse; }
 .clearfix:after {content: "."; display: block; height:0; clear:both; visibility: hidden;}
 .clearfix { *zoom:1; }
 .main {max-width: 1200px; width: 100%; margin: 0 auto;}
-button.el-button.el-button--primary {
+button.el-button.el-button--primary.cosmi-button {
   width: 196px;
   background-color: #232323;
   font-size: 16px;
   border-radius: 0;
+}
+.shipping-address-box {
+  background-color: #fff4e8 !important;
+  > th {
+    background-color: #fff4e8 !important;
+  }
+}
+.cosmi-warn.el-message-box{
+  .el-message-box__btns{
+    text-align: left;
+  }
 }
 .person-center-title{
   font-size: 16px;
@@ -29,7 +40,7 @@ button.el-button.el-button--primary {
     vertical-align: middle;
   }
 }
-.el-form {
+.el-form.cosmi-form {
   .el-input__inner {
     border-radius: 0;
     border-color: #636363;

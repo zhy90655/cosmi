@@ -1,6 +1,12 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import { login, register, address, deleteAddress } from './api'
+import {
+  login,
+  register,
+  address,
+  deleteAddress,
+  addAddress
+} from './api'
 // import { fail } from 'assert'
 
 Vue.use(Vuex)
@@ -36,7 +42,7 @@ export default new Vuex.Store({
       id: '0008'
     }
     ],
-    isLogin: false,
+    isLogin: true,
     showLogin: false,
     dialogVisible: true,
     productList: [{
@@ -93,18 +99,25 @@ export default new Vuex.Store({
     },
     UserRegister (content, data) {
       register(data).then(res => {
-        console.log('success')
+        console.log('success', res)
       })
     },
     getAddress (content, data) {
       address(data).then(res => {
-        console.log('success')
+        console.log('success', res)
       })
     },
     delectedAddress (content, data) {
-      deleteAddress(data).then(res => {
+      deleteAddress(data).then(() => {
         console.log('success')
       })
+    },
+    addTheAddress (content, data, success, failed) {
+      addAddress(data).then(res => {
+        success && success(res)
+      }).catch(error => {
+        failed && failed(error)
+      })11
     }
   }
 })
