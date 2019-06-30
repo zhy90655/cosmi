@@ -33,11 +33,11 @@ export function address (addressType) {
   })
 }
 
-export function deleteAddress (data) {
+export function deleteAddress (id) {
   return service({
-    url: '/address/deleteById',
-    method: 'delete',
-    data
+    url: '/address/deleteById?id=' + id,
+    method: 'delete'
+
   })
 }
 

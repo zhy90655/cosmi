@@ -18,7 +18,7 @@
           <el-table-column prop="phone" label="PHONE" align="center"></el-table-column>
           <el-table-column align="center">
             <template slot-scope="scope">
-              <div class="edit" @click="editTheAddress(scope.row.id)">
+              <div class="edit" @click="editTheAddress(scope.row)">
                 <img src="../../assets/images/person/edit.png" />
                 <img
                   @click="deleteTheAddress(scope.row.id)"
@@ -68,8 +68,9 @@
       :visible.sync="toPushAddress"
       width="40%"
       custom-class="add-address"
+      :before-close="handleClose"
     >
-      <el-form :model="form">
+      <el-form :model="form"  ref="AddressForm">
         <el-form-item label="First Name" :label-width="formLabelWidth">
           <el-col :span="8">
             <el-input v-model="form.firstName" auto-complete="off"></el-input>
@@ -157,6 +158,12 @@ export default {
         }
       )
         .then(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          })
+        })
+        .catch(() => {
           this.delectedAddress(id).then(() => {
             this.$message({
               type: 'success',
@@ -164,24 +171,31 @@ export default {
             })
           })
         })
-        .catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消删除'
-          })
-        })
     },
     onSubmit () {
       console.log('submit!')
     },
+    handleClose () {
+      this.$refs['AddressForm'].resetFields()
+      this.toPushAddress = false
+    },
     onSubmitAddress () {
+      // if (this.form.id) {
+
+      // } else {
       this.addTheAddress(this.form, res => {
         this.getAddress(this.form.addressType)
         // console.log('res', res)
+        this.$refs['AddressForm'].resetFields()
       })
+      // }
     },
     addAddressBtn (addressType) {
       this.form.addressType = addressType
+      this.toPushAddress = true
+    },
+    editTheAddress (item) {
+      this.form = item
       this.toPushAddress = true
     }
   }
