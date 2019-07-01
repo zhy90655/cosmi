@@ -3,6 +3,9 @@
     <div class="title">
       <img src="../../assets/images/person/person.png" />Connnect Account
     </div>
+    <div class="userinfo-subtit">
+      Required Fields
+    </div>
     <el-form ref="userInfo" :rules="rules" :model="form" label-width="180px">
       <el-form-item label="First Name" prop="firstName">
         <el-input v-model="form.firstName"></el-input>
