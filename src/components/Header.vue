@@ -251,7 +251,7 @@ export default {
       background-color: #fff;
       width: 100%;
       opacity: 0;
-      z-index: 1;
+      z-index: 100;
       transition: opacity .5s ease-in-out, height .1s ease .5s;
       &.show {
         transition: opacity .5s ease-in-out;

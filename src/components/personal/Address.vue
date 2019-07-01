@@ -135,7 +135,7 @@
 </template>
 <script>
 import { mapActions, mapState } from 'vuex'
-import { updateAddress } from '../../api'
+import { updateAddress, addAddress } from '../../api'
 export default {
   data () {
     return {
@@ -183,6 +183,7 @@ export default {
     }
   },
   created () {
+    window._this = this
     // 获取shipping地址
     this.getAddress(1)
     // 获取bill地址
@@ -192,7 +193,7 @@ export default {
     ...mapState(['shippingAddress', 'billAddress'])
   },
   methods: {
-    ...mapActions(['getAddress', 'delectedAddress', 'addTheAddress']),
+    ...mapActions(['getAddress', 'delectedAddress']),
     deleteTheAddress (id) {
       this.$confirm(
         "If you delete this address,you can't find it again",
@@ -222,49 +223,48 @@ export default {
           })
         })
     },
-    onSubmit () {
-      console.log('submit!')
-    },
     handleClose () {
       this.toPushAddress = false
       this.$refs['AddressForm'].resetFields()
     },
     onSubmitAddress () {
-      let {
-        id,
-        firstName,
-        lastName,
-        address,
-        city,
-        country,
-        isDefault,
-        postCode,
-        phone
-      } = this.form
-      let data = {
-        id,
-        firstName,
-        lastName,
-        address,
-        city,
-        country,
-        isDefault,
-        postCode,
-        phone
-      }
+      // let {
+      //   id,
+      //   firstName,
+      //   lastName,
+      //   address,
+      //   city,
+      //   country,
+      //   isDefault,
+      //   postCode,
+      //   phone,
+      //   addressType
+      // } = this.form
+      // let data = {
+      //   id,
+      //   firstName,
+      //   lastName,
+      //   address,
+      //   city,
+      //   country,
+      //   isDefault,
+      //   postCode,
+      //   phone
+      // }
       this.$refs['AddressForm'].validate(valid => {
         if (valid) {
+          console.log(this.form)
           if (this.isEdit) {
-            updateAddress(data).then(res => {
+            updateAddress(this.form).then(res => {
               this.getAddress(this.form.addressType)
+              this.handleClose()
             })
           } else {
-            this.addTheAddress(data).then(res => {
+            addAddress(this.form).then(res => {
               this.getAddress(this.form.addressType)
+              this.handleClose()
             })
           }
-          this.toPushAddress = false
-          this.$refs['AddressForm'].resetFields()
         } else {
           console.log('error submit!!')
           return false
@@ -277,8 +277,13 @@ export default {
       this.toPushAddress = true
     },
     editTheAddress (item, addressType) {
-      this.form = item
+      this.form.addressType = addressType
       this.isEdit = true
+      this.$nextTick(() => {
+        this.$nextTick(() => {
+          this.form = { ...item }
+        })
+      })
       this.toPushAddress = true
     }
   }

@@ -1,9 +1,9 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import createPersistedState from 'vuex-persistedstate'
 import {
   address,
-  deleteAddress,
-  addAddress
+  deleteAddress
 } from './api'
 // import { fail } from 'assert'
 
@@ -113,13 +113,9 @@ export default new Vuex.Store({
       deleteAddress(data).then(() => {
         console.log('success')
       })
-    },
-    addTheAddress (content, data, success, failed) {
-      addAddress(data).then(res => {
-        success && success(res)
-      }).catch(error => {
-        failed && failed(error)
-      })
     }
-  }
+  },
+  plugins: [createPersistedState({
+    storage: window.sessionStorage
+  })]
 })
