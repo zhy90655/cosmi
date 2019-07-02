@@ -1,5 +1,12 @@
 import service from './plugins/axios'
 
+/**
+ * 检验邮箱是否已经注册
+ * 登录接口--注册接口
+ * 获取地址--删除地址--新增地址--更新地址
+ * 获取用户信息--更新用户信息--更新密码
+ */
+
 // 检验邮箱是否已经注册
 export function isEmailRegister (data) {
   return service({
@@ -27,7 +34,7 @@ export function register (data) {
   })
 }
 
-// 地址模块
+// 获取地址
 export function address (addressType) {
   return service({
     url: '/address/getAddress?addressType=' + addressType, // '/address/getAddress',
@@ -75,6 +82,15 @@ export function getUserInfo (data) {
 export function updateUserInfo (data) {
   return service({
     url: '/users/updateUserBaseInfo',
+    method: 'post',
+    data
+  })
+}
+
+// 更新密码
+export function updatePwd (data) {
+  return service({
+    url: '/users/updateUserPwd',
     method: 'post',
     data
   })

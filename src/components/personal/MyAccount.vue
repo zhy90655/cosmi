@@ -12,8 +12,10 @@
         <el-input v-model="form.lastName"></el-input>
       </el-form-item>
       <el-form-item label="Gender" prop="gender">
-        <el-radio v-model="form.gender" label="F">Female</el-radio>
-        <el-radio v-model="form.gender" label="M">Male</el-radio>
+        <el-radio-group v-model="form.gender">
+          <el-radio label="F">Female</el-radio>
+          <el-radio label="M">Male</el-radio>
+        </el-radio-group>
       </el-form-item>
       <el-form-item label="Birthday" required>
         <el-col :span="4">
@@ -48,15 +50,15 @@
     <div class="title">
       <img src="../../assets/images/person/password.png" />Change Password
     </div>
-    <el-form ref="changePwd" :rules="rules" :model="form" label-width="210px">
-      <el-form-item label="Current Password" prop="password">
-        <el-input v-model="pwd.password"></el-input>
+    <el-form ref="changePwd" status-icon :rules="rules" :model="pwd" label-width="210px">
+      <el-form-item label="Current Password" prop="oldPwd">
+        <el-input  type="password" v-model="pwd.oldPwd"></el-input>
       </el-form-item>
-      <el-form-item label="New Password" prop="lastName">
-        <el-input v-model="pwd.newPwd"></el-input>
+      <el-form-item label="New Password" prop="newPwd">
+        <el-input  type="password" v-model="pwd.newPwd"></el-input>
       </el-form-item>
-      <el-form-item label="Repeat New Password" prop="againPwd">
-        <el-input v-model.number="form.againPwd"></el-input>
+      <el-form-item label="Repeat New Password" prop="password">
+        <el-input  type="password" v-model.number="pwd.password"></el-input>
       </el-form-item>
       <el-form-item class="submit-pwd">
         <el-button type="primary" @click="onSubmitPwd">SAVE</el-button>
@@ -65,9 +67,30 @@
   </div>
 </template>
 <script>
-import { getUserInfo, updateUserInfo } from '../../api'
+import { getUserInfo, updateUserInfo, updatePwd } from '../../api'
 export default {
   data () {
+    var validatePass = (rule, value, callback) => {
+      console.log(value)
+      if (value === '') {
+        callback(new Error('请输入密码'))
+      } else {
+        if (this.pwd.password !== '') {
+          this.$refs.changePwd.validateField('password')
+        }
+        callback()
+      }
+    }
+    var validatePass2 = (rule, value, callback) => {
+      console.log(value)
+      if (value === '') {
+        callback(new Error('请再次输入密码'))
+      } else if (value !== this.pwd.newPwd) {
+        callback(new Error('两次输入密码不一致!'))
+      } else {
+        callback()
+      }
+    }
     return {
       form: {
         firstName: '',
@@ -80,9 +103,9 @@ export default {
         email: ''
       },
       pwd: {
-        password: '',
+        oldPwd: '',
         newPwd: '',
-        againPwd: ''
+        password: ''
       },
       rules: {
         firstName: [
@@ -100,20 +123,11 @@ export default {
           }
         ],
         gender: [
-          { required: true, message: '请选择活动资源', trigger: 'change' }
+          { required: true, message: 'please change gender', trigger: 'change' }
         ],
-        year: [
-          { required: true, message: '年龄不能为空', trigger: 'blur' },
-          { type: 'number', message: '年龄必须为数字值' }
-        ],
-        month: [
-          { required: true, message: '年龄不能为空', trigger: 'blur' },
-          { type: 'number', message: '年龄必须为数字值' }
-        ],
-        day: [
-          { required: true, message: '年龄不能为空', trigger: 'blur' },
-          { type: 'number', message: '年龄必须为数字值' }
-        ],
+        year: [{ required: true, message: '年龄不能为空', trigger: 'blur' }],
+        month: [{ required: true, message: '年龄不能为空', trigger: 'blur' }],
+        day: [{ required: true, message: '年龄不能为空', trigger: 'blur' }],
         email: [
           { required: true, message: '请输入邮箱地址', trigger: 'blur' },
           {
@@ -122,14 +136,14 @@ export default {
             trigger: 'blur,change'
           }
         ],
-        password: [
+        oldPwd: [
           { required: true, message: '请选择活动资源', trigger: 'blur' }
         ],
         newPwd: [
-          { required: true, message: '请选择活动资源', trigger: 'blur' }
+          { validator: validatePass, trigger: 'blur' }
         ],
-        againPwd: [
-          { required: true, message: '请选择活动资源', trigger: 'blur' }
+        password: [
+          { validator: validatePass2, trigger: 'blur' }
         ]
       }
     }
@@ -137,7 +151,26 @@ export default {
   created () {
     getUserInfo().then(res => {
       if (res) {
-        this.form = res.data
+        let {
+          firstName,
+          lastName,
+          gender,
+          year,
+          month,
+          day,
+          phone,
+          email
+        } = res.data
+        this.form = {
+          firstName,
+          lastName,
+          gender,
+          year,
+          month,
+          day,
+          phone,
+          email
+        }
       }
     })
   },
@@ -145,7 +178,6 @@ export default {
     onSubmit () {
       this.$refs['userInfo'].validate(valid => {
         if (valid) {
-          // alert('submit!')
           updateUserInfo(this.form)
         } else {
           console.log('error submit!!')
@@ -156,8 +188,10 @@ export default {
     onSubmitPwd () {
       this.$refs['changePwd'].validate(valid => {
         if (valid) {
-          alert('pwdsubmit!')
-          // updateUserInfo(this.form)
+          // let { newPwd, oldPwd } = this.pwd
+          // if (newPwd === oldPwd) {
+          updatePwd(this.pwd)
+          // }
         } else {
           console.log('error submit!!')
           return false
