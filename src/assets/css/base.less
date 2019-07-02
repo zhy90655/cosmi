@@ -1,18 +1,102 @@
-body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,code,form,fieldset,legend,input,button,textarea,p,blockquote,th,td { margin:0; padding:0;}
-body { color:#151515; font-family: optima-regular, Verdana, Arial, Helvetica, sans-serif; Font-size:62.5% }
-td,th,caption { font-size:14px; }
-h1, h2, h3, h4, h5, h6 { font-weight:normal;}
-address, caption, cite, code, dfn, em, strong, th, var { font-style:normal; font-weight:normal;}
-a { text-decoration:none; color:#151515; }
-a:hover { text-decoration:none; }
-img { border:none; }
-ol,ul,li { list-style:none; }
-input, textarea, select, button { font:14px optima-regular,Verdana,Helvetica,Arial,sans-serif; }
-table { border-collapse:collapse; }
+body,
+div,
+dl,
+dt,
+dd,
+ul,
+ol,
+li,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+pre,
+code,
+form,
+fieldset,
+legend,
+input,
+button,
+textarea,
+p,
+blockquote,
+th,
+td {
+  margin: 0;
+  padding: 0;
+}
+body {
+  color: #151515;
+  font-family: optima-regular, Verdana, Arial, Helvetica, sans-serif;
+  font-size: 62.5%;
+}
+td,
+th,
+caption {
+  font-size: 14px;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: normal;
+}
+address,
+caption,
+cite,
+code,
+dfn,
+em,
+strong,
+th,
+var {
+  font-style: normal;
+  font-weight: normal;
+}
+a {
+  text-decoration: none;
+  color: #151515;
+}
+a:hover {
+  text-decoration: none;
+}
+img {
+  border: none;
+}
+ol,
+ul,
+li {
+  list-style: none;
+}
+input,
+textarea,
+select,
+button {
+  font: 14px optima-regular, Verdana, Helvetica, Arial, sans-serif;
+}
+table {
+  border-collapse: collapse;
+}
 
-.clearfix:after {content: "."; display: block; height:0; clear:both; visibility: hidden;}
-.clearfix { *zoom:1; }
-.main {max-width: 1200px; width: 100%; margin: 0 auto;}
+.clearfix:after {
+  content: ".";
+  display: block;
+  height: 0;
+  clear: both;
+  visibility: hidden;
+}
+.clearfix {
+  *zoom: 1;
+}
+.main {
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+}
 button.el-button.el-button--primary.cosmi-button {
   width: 196px;
   background-color: #232323;
@@ -25,12 +109,12 @@ button.el-button.el-button--primary.cosmi-button {
     background-color: #fff4e8 !important;
   }
 }
-.cosmi-warn.el-message-box{
-  .el-message-box__btns{
+.cosmi-warn.el-message-box {
+  .el-message-box__btns {
     text-align: left;
   }
 }
-.person-center-title{
+.person-center-title {
   font-size: 16px;
   line-height: 52px;
   margin-top: 12px;
@@ -60,24 +144,56 @@ button.el-button.el-button--primary.cosmi-button {
     }
   }
 }
-.account-wrap{
-  .el-form-item__label{
+.account-wrap {
+  .el-form-item__label {
     color: #000;
     font-weight: bold;
   }
-  .el-form-item__content{
+  .el-form-item__content {
     color: #565656;
   }
+  .submit-account,
+  .submit-pwd {
+    .el-form-item__content {
+      margin-left: 0 !important;
+      text-align: center;
+      .el-button {
+        width: 244px;
+        height: 44px;
+        border-radius: 0;
+        font-size: 18px;
+        border: none;
+      }
+    }
+  }
+  .submit-account {
+    .el-button {
+      background-color: #000000;
+    }
+  }
+  .submit-pwd {
+    .el-button {
+      background-color: #e5b886;
+    }
+  }
 }
-.cosmi-warn{
+.order-wrap {
+  .el-menu--horizontal > .el-menu-item.is-active {
+    border-bottom-color: transparent !important;
+  }
+  .el-menu-item{
+    border-bottom-color: transparent !important;
+  }
+}
+.cosmi-warn {
   position: relative;
 }
-.address-delete-Btn{
+.address-delete-Btn {
   background-color: #e5b886 !important;
   color: #fff !important;
   border: none !important;
 }
-.close-address-delete{
+.close-address-delete {
   position: absolute;
   left: 110px;
   border: 1px solid #c6c6c6;

@@ -3,9 +3,7 @@
     <div class="title">
       <img src="../../assets/images/person/person.png" />Connnect Account
     </div>
-    <div class="userinfo-subtit">
-      Required Fields
-    </div>
+    <div class="userinfo-subtit">Required Fields</div>
     <el-form ref="userInfo" :rules="rules" :model="form" label-width="180px">
       <el-form-item label="First Name" prop="firstName">
         <el-input v-model="form.firstName"></el-input>
@@ -43,7 +41,7 @@
       <el-form-item label="Subscription Mail" prop="email">
         <el-input v-model.number="form.email"></el-input>
       </el-form-item>
-      <el-form-item>
+      <el-form-item class="submit-account">
         <el-button type="primary" @click="onSubmit">SAVE</el-button>
       </el-form-item>
     </el-form>
@@ -60,7 +58,7 @@
       <el-form-item label="Repeat New Password" prop="againPwd">
         <el-input v-model.number="form.againPwd"></el-input>
       </el-form-item>
-      <el-form-item>
+      <el-form-item class="submit-pwd">
         <el-button type="primary" @click="onSubmitPwd">SAVE</el-button>
       </el-form-item>
     </el-form>
@@ -92,16 +90,14 @@ export default {
             required: true,
             message: 'please enter first Name',
             trigger: 'blur'
-          },
-          { min: 3, max: 50, message: '长度在 3 到 50 个字符', trigger: 'blur' }
+          }
         ],
         lastName: [
           {
             required: true,
             message: 'please enter last Name',
             trigger: 'blur'
-          },
-          { min: 3, max: 50, message: '长度在 3 到 50 个字符', trigger: 'blur' }
+          }
         ],
         gender: [
           { required: true, message: '请选择活动资源', trigger: 'change' }
@@ -181,6 +177,18 @@ export default {
     > img {
       margin-right: 10px;
       vertical-align: middle;
+    }
+  }
+  .userinfo-subtit {
+    font-size: 12px;
+    color: #565656;
+    line-height: 20px;
+    margin-bottom: 20px;
+    &::before {
+      content: "*";
+      height: 20px;
+      position: relative;
+      left: 0px;
     }
   }
   .cosmi-datastyle {
