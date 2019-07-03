@@ -47,7 +47,6 @@ export function deleteAddress (id) {
   return service({
     url: '/address/deleteById?id=' + id,
     method: 'delete'
-
   })
 }
 

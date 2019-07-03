@@ -1,336 +1,171 @@
 <template>
   <div class="order-wrap" style="width:830px">
     <div class="shipping">
-      <el-menu mode="horizontal" default-active="1" active-text-color="#b78a69"  text-color="#000000">
-        <el-menu-item v-for="(item,index) in ordersMenu" :key="index" :index="item">{{item}}</el-menu-item>
-      </el-menu>
-      <div class="item">
-        <el-table
-          header-row-class-name="shipping-address-box"
-          :data="shippingAddress"
-          style="width: 830px"
-        >
-          <el-table-column label="NAME" width="180" align="center">
-            <template slot-scope="scope">{{scope.row.firstName+' '+scope.row.lastName}}</template>
-          </el-table-column>
-          <el-table-column prop="address" label="ADDRESS" width="340" align="center"></el-table-column>
-          <el-table-column prop="phone" label="PHONE" align="center"></el-table-column>
-          <el-table-column align="center">
-            <template slot-scope="scope">
-              <div class="edit">
-                <img @click="editTheAddress(scope.row,1)" src="../../assets/images/person/edit.png" />
-                <img
-                  @click="deleteTheAddress(scope.row.id)"
-                  src="../../assets/images/person/trashcan.png"
-                />
+      <ul class="tabs">
+        <li v-for="item in ordersMenu" :key="item.id" :class="{active:activeIndex === item.id}" @click="activeIndex = item.id">{{item.type}}</li>
+      </ul>
+      <ul class="orderTitle">
+        <li v-for="(item,index) in titleList" :key="index">{{item}}</li>
+      </ul>
+      <div class="orderDetail" v-for="order in orderList" :key="order.orderNumber">
+        <ul class="head">
+          <li>{{order.createDate}}</li>
+          <li>Order Number:{{order.orderNumber}}</li>
+          <li><img src="../../assets/images/person/trashcan.png"/></li>
+        </ul>
+        <div class="body">
+          <ul v-for="(product, index) in order.products" :key="index" :class="[index === 0 ? 'product' : 'product otehrLine']">
+            <li class="detail">
+              <img :src="product.img" alt="">
+              <div>
+                <p>{{product.name}}</p>
+                <span>${{product.price}}</span>
               </div>
-              <div
-                class="address-state"
-              >{{scope.row.state==='1'?'Default Address':'set To Default Address'}}</div>
-            </template>
-          </el-table-column>
-        </el-table>
+            </li>
+            <li class="qty">x{{product.count}}</li>
+            <li class="total"><p>${{order.amount}}</p></li>
+            <li class="status">
+              <p>{{ordersMenu.find(_ => _.id === order.status).type}}</p>
+              <p>Order Details</p>
+              <p>Shipping Number <span>{{order.shippingNumber}}</span></p>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
-    <div class="shipping" style="margin-top:48px">
-      <div class="title person-center-title">
-        <img src="../../assets/images/person/bill.png" />Billing Address
-        <el-button round style="float:right;" @click="addAddressBtn(2)">
-          <i class="el-icon-plus"></i>ADD
-        </el-button>
-      </div>
-      <div class="item">
-        <el-table
-          header-row-class-name="shipping-address-box"
-          :data="billAddress"
-          style="width: 830px"
-        >
-          <el-table-column label="NAME" width="180" align="center">
-            <template slot-scope="scope">{{scope.row.firstName+' '+scope.row.lastName}}</template>
-          </el-table-column>
-          <el-table-column prop="address" label="ADDRESS" width="340" align="center"></el-table-column>
-          <el-table-column prop="phone" label="PHONE" align="center"></el-table-column>
-          <el-table-column align="center">
-            <template slot-scope="scope">
-              <div class="edit">
-                <img src="../../assets/images/person/edit.png" @click="editTheAddress(scope.row,2)" />
-                <img src="../../assets/images/person/trashcan.png" />
-              </div>
-              <div
-                class="address-state"
-              >{{scope.row.state==='1'?'Default Address':'set To Default Address'}}</div>
-            </template>
-          </el-table-column>
-        </el-table>
-      </div>
-    </div>
-    <el-dialog
-      title="Add Address"
-      :visible.sync="toPushAddress"
-      width="40%"
-      custom-class="add-address"
-      :before-close="handleClose"
-    >
-      <el-form :model="form" ref="AddressForm" :rules="rules">
-        <el-form-item label="First Name" :label-width="formLabelWidth">
-          <el-col :span="9">
-            <el-form-item prop="firstName">
-              <el-input v-model="form.firstName" auto-complete="off"></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col class="el-form-item__label" :span="6">Last Name</el-col>
-          <el-col :span="9">
-            <el-form-item prop="lastName">
-              <el-input v-model="form.lastName" auto-complete="off"></el-input>
-            </el-form-item>
-          </el-col>
-        </el-form-item>
-        <el-form-item label="Country" :label-width="formLabelWidth">
-          <el-col :span="9">
-            <el-form-item prop="country">
-              <el-input v-model="form.country" auto-complete="off"></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col class="el-form-item__label" :span="6">City</el-col>
-          <el-col :span="9">
-            <el-form-item prop="city">
-              <el-input v-model="form.city" auto-complete="off"></el-input>
-            </el-form-item>
-          </el-col>
-        </el-form-item>
-        <el-form-item label="address" :label-width="formLabelWidth" prop="address">
-          <el-input v-model="form.address" auto-complete="off"></el-input>
-        </el-form-item>
-        <el-form-item label=" " :label-width="formLabelWidth">
-          <el-input v-model="form.address" auto-complete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="Post Code" :label-width="formLabelWidth">
-          <el-col :span="9">
-            <el-form-item prop="postCode">
-              <el-input v-model="form.postCode" auto-complete="off"></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col class="el-form-item__label" :span="6">Telephone</el-col>
-          <el-col :span="9">
-            <el-form-item prop="phone">
-              <el-input v-model="form.phone" auto-complete="off"></el-input>
-            </el-form-item>
-          </el-col>
-        </el-form-item>
-      </el-form>
-
-      <div slot="footer" class="dialog-footer">
-        <el-checkbox
-          :checked="form.isDefault==='Y'"
-          @change="val => { form.isDefault = val?'Y':'N' }"
-        >Set the default address</el-checkbox>
-        <el-button type="primary" @click="onSubmitAddress">SAVE</el-button>
-        <el-button @click="handleClose">CANCEL</el-button>
-      </div>
-    </el-dialog>
   </div>
 </template>
 <script>
-import { mapActions, mapState } from 'vuex'
-import { updateAddress, addAddress } from '../../api'
+// import { mapActions, mapState } from 'vuex'
+// import { updateAddress, addAddress } from '../../api'
 export default {
   data () {
     return {
       ordersMenu: [
-        'All Orders',
-        'Pending Payment',
-        'To Be Shippen',
-        'completed',
-        'Cancelled'
+        { id: 0, type: 'All Orders' },
+        { id: 1, type: 'Pending Payment' },
+        { id: 2, type: 'To Be Shippen' },
+        { id: 3, type: 'Completed' },
+        { id: 4, type: 'Cancelled' }
       ],
-      toPushAddress: false,
-      formLabelWidth: '120px',
-      isEdit: false,
-      form: {
-        firstName: '',
-        lastName: '',
-        country: '',
-        city: '',
-        address: '',
-        postCode: '',
-        phone: '',
-        addressType: 1,
-        isDefault: 'N'
-      },
-      rules: {
-        firstName: [
-          {
-            required: true,
-            message: 'please enter First Name',
-            trigger: 'blur'
-          }
-        ],
-        lastName: [
-          { required: true, message: 'please enter Last Name', trigger: 'blur' }
-        ],
-        country: [
-          { required: true, message: 'please enter country', trigger: 'blur' }
-        ],
-        city: [
-          { required: true, message: 'please enter city', trigger: 'blur' }
-        ],
-        address: [
-          { required: true, message: 'please enter address', trigger: 'blur' }
-        ],
-        postCode: [
-          { required: true, message: 'please enter postCode', trigger: 'blur' }
-        ],
-        phone: [
-          { required: true, message: 'please enter phone', trigger: 'blur' }
-        ]
-      }
+      activeIndex: 0,
+      titleList: ['Orders', 'Qty', 'Oreder Amount', 'Oreder Status'],
+      orderList: [
+        {
+          orderNumber: '12345678910',
+          shippingNumber: '66666666666',
+          createDate: '2019-05-10',
+          amount: 230,
+          status: 1, // 与ordersMenu 里面的id 对应
+          products: [
+            {
+              img: '/static/images/bag/product.png',
+              name: 'PRODUCT NAME BALABALABALABALABALA BALABALA',
+              count: 1,
+              price: 30.01,
+              id: '0005'
+            },
+            {
+              img: '/static/images/bag/product.png',
+              name: 'PRODUCT NAME BALABALABALABALABALA BALABALA',
+              count: 2,
+              price: 33.00,
+              id: '0006'
+            }
+          ]
+        }
+      ]
     }
   },
   created () {
-    window._this = this
-    // 获取shipping地址
-    this.getAddress(1)
-    // 获取bill地址
-    this.getAddress(2)
-  },
-  computed: {
-    ...mapState(['shippingAddress', 'billAddress'])
-  },
-  methods: {
-    ...mapActions(['getAddress', 'delectedAddress']),
-    deleteTheAddress (id) {
-      this.$confirm(
-        "If you delete this address,you can't find it again",
-        'Are you sure to delete this address?',
-        {
-          confirmButtonText: 'Delete',
-          cancelButtonText: 'Cancel',
-          confirmButtonClass: 'address-delete-Btn',
-          cancelButtonClass: 'close-address-delete',
-          customClass: 'cosmi-warn',
-          type: 'warning'
-        }
-      )
-        .then(() => {
-          this.delectedAddress(id).then(() => {
-            this.$message({
-              type: 'success',
-              message: '删除成功!'
-            })
-            this.getAddress(this.form.addressType)
-          })
-        })
-        .catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消删除'
-          })
-        })
-    },
-    handleClose () {
-      this.toPushAddress = false
-      this.$refs['AddressForm'].resetFields()
-    },
-    onSubmitAddress () {
-      // let {
-      //   id,
-      //   firstName,
-      //   lastName,
-      //   address,
-      //   city,
-      //   country,
-      //   isDefault,
-      //   postCode,
-      //   phone,
-      //   addressType
-      // } = this.form
-      // let data = {
-      //   id,
-      //   firstName,
-      //   lastName,
-      //   address,
-      //   city,
-      //   country,
-      //   isDefault,
-      //   postCode,
-      //   phone
-      // }
-      this.$refs['AddressForm'].validate(valid => {
-        if (valid) {
-          console.log(this.form)
-          if (this.isEdit) {
-            updateAddress(this.form).then(res => {
-              this.getAddress(this.form.addressType)
-              this.handleClose()
-            })
-          } else {
-            addAddress(this.form).then(res => {
-              this.getAddress(this.form.addressType)
-              this.handleClose()
-            })
-          }
-        } else {
-          console.log('error submit!!')
-          return false
-        }
-      })
-    },
-    addAddressBtn (addressType) {
-      this.isEdit = false
-      this.form.addressType = addressType
-      this.toPushAddress = true
-    },
-    editTheAddress (item, addressType) {
-      this.form.addressType = addressType
-      this.isEdit = true
-      this.$nextTick(() => {
-        this.$nextTick(() => {
-          this.form = { ...item }
-        })
-      })
-      this.toPushAddress = true
-    }
   }
 }
 </script>
 <style lang="less" scoped>
-.shipping-wrap {
-  margin-top: 32px;
-  .shipping {
-    .item {
-      .edit {
-        > img:first-child {
-          margin-right: 20px;
-        }
-        > img {
-          height: 16px;
-          width: 16px;
-          cursor: pointer;
-        }
-      }
-      .address-state {
-        word-break: keep-all;
-      }
+.order-wrap {
+  .tabs {
+    margin-top: 20px;
+    display: flex;
+    color: #000;
+    font-size: 14px;
+    li {
+      cursor: pointer;
+      padding: 10px 0;
+      margin-right: 60px;
+    }
+    .active {
+      text-decoration: underline;
+      color: #b78a69;
     }
   }
-  .add-address {
-    padding: 0 26px;
-  }
-  .el-dialog__body {
-    padding: 30px 26px;
-  }
-  .dialog-footer {
-    .el-checkbox {
-      position: absolute;
-      left: 20px;
-      font-size: 14px;
-      height: 40px;
+  .orderTitle {
+    display: flex;
+    height: 40px;
+    font-size: 14px;
+    margin-bottom: 9px;
+    background-color: #f6f6f6;
+    >li {
+      text-align: center;
+      width: 138px;
       line-height: 40px;
+      &:first-child {
+        flex-grow: 1;
+      }
     }
-    .el-button--primary {
-      width: 108px;
-      color: #fff;
-      background-color: #000000;
+  }
+  .orderDetail {
+    box-sizing: border-box;
+    border-bottom: 1px solid #e7e7e7;
+    border-right: 1px solid #e7e7e7;
+    .head {
+      height: 40px;
+      background-color: #fff5e7;
+      display: flex;
+      line-height: 40px;
+      justify-content: space-between;
+      padding-right: 20px;
+      border-left: 1px solid #e7e7e7;
+      border-top: 1px solid #e7e7e7;
+      >li:first-child {
+        text-align: center;
+        width: 138px;
+      }
+      >li:nth-child(2) {
+        flex-grow: 1;
+      }
+      img {
+        cursor: pointer;
+      }
+    }
+    .body {
+      .product {
+        height: 138px;
+        display: flex;
+        >li {
+          width: 138px;
+          border-left: 1px solid #e7e7e7;
+          border-top: 1px solid #e7e7e7;
+          &.total, &.qty {
+            line-height: 138px;
+            text-align: center;
+          }
+        }
+        &.otehrLine .total, &.otehrLine .status {
+          border-top: none;
+          >p {
+            display: none;
+          }
+        }
+        .detail {
+          padding-left: 10px;
+          flex-grow: 1;
+          display: flex;
+          align-items:center;
+          >div {
+            margin-left: 10px;
+          }
+        }
+      }
     }
   }
 }

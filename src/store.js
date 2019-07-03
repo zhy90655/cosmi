@@ -2,8 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import createPersistedState from 'vuex-persistedstate'
 import {
-  address,
-  deleteAddress
+  address
 } from './api'
 // import { fail } from 'assert'
 
@@ -101,17 +100,12 @@ export default new Vuex.Store({
     getAddress (content, data) {
       address(data).then(res => {
         if (res.success) {
-          if (data === 1) {
+          if (+data === 1) {
             content.commit('setAddress', res.data)
           } else {
             content.commit('setBillAddress', res.data)
           }
         }
-      })
-    },
-    delectedAddress (content, data) {
-      deleteAddress(data).then(() => {
-        console.log('success')
       })
     }
   },

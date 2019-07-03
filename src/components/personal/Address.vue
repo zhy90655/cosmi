@@ -22,10 +22,7 @@
             <template slot-scope="scope">
               <div class="edit">
                 <img @click="editTheAddress(scope.row,1)" src="../../assets/images/person/edit.png" />
-                <img
-                  @click="deleteTheAddress(scope.row.id)"
-                  src="../../assets/images/person/trashcan.png"
-                />
+                <img @click="deleteTheAddress(scope.row.id, 1)" src="../../assets/images/person/trashcan.png"/>
               </div>
               <div
                 class="address-state"
@@ -57,7 +54,7 @@
             <template slot-scope="scope">
               <div class="edit">
                 <img src="../../assets/images/person/edit.png" @click="editTheAddress(scope.row,2)" />
-                <img src="../../assets/images/person/trashcan.png" />
+                <img @click="deleteTheAddress(scope.row.id, 2)" src="../../assets/images/person/trashcan.png"/>
               </div>
               <div
                 class="address-state"
@@ -135,7 +132,7 @@
 </template>
 <script>
 import { mapActions, mapState } from 'vuex'
-import { updateAddress, addAddress } from '../../api'
+import { updateAddress, addAddress, deleteAddress } from '../../api'
 export default {
   data () {
     return {
@@ -183,7 +180,6 @@ export default {
     }
   },
   created () {
-    window._this = this
     // 获取shipping地址
     this.getAddress(1)
     // 获取bill地址
@@ -194,7 +190,7 @@ export default {
   },
   methods: {
     ...mapActions(['getAddress', 'delectedAddress']),
-    deleteTheAddress (id) {
+    deleteTheAddress (id, type) {
       this.$confirm(
         "If you delete this address,you can't find it again",
         'Are you sure to delete this address?',
@@ -208,52 +204,23 @@ export default {
         }
       )
         .then(() => {
-          this.delectedAddress(id).then(() => {
+          deleteAddress(id).then(() => {
             this.$message({
               type: 'success',
               message: '删除成功!'
             })
-            this.getAddress(this.form.addressType)
+            this.getAddress(type)
           })
         })
-        .catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消删除'
-          })
-        })
+        .catch(() => {})
     },
     handleClose () {
       this.toPushAddress = false
       this.$refs['AddressForm'].resetFields()
     },
     onSubmitAddress () {
-      // let {
-      //   id,
-      //   firstName,
-      //   lastName,
-      //   address,
-      //   city,
-      //   country,
-      //   isDefault,
-      //   postCode,
-      //   phone,
-      //   addressType
-      // } = this.form
-      // let data = {
-      //   id,
-      //   firstName,
-      //   lastName,
-      //   address,
-      //   city,
-      //   country,
-      //   isDefault,
-      //   postCode,
-      //   phone
-      // }
       this.$refs['AddressForm'].validate(valid => {
         if (valid) {
-          console.log(this.form)
           if (this.isEdit) {
             updateAddress(this.form).then(res => {
               this.getAddress(this.form.addressType)
