@@ -30,8 +30,8 @@
             <li class="qty">x{{product.count}}</li>
             <li class="total"><p>${{order.amount}}</p></li>
             <li class="status">
-              <p>{{ordersMenu.find(_ => _.id === order.status).type}}</p>
-              <p>Order Details</p>
+              <p :class="{istopay: order.status === 1}">{{ordersMenu.find(_ => _.id === order.status).type}}</p>
+              <p v-if="order.status !== 1" class="det">Order Details</p>
               <p>Shipping Number <span>{{order.shippingNumber}}</span></p>
             </li>
           </ul>
@@ -88,6 +88,36 @@ export default {
               id: '0006'
             }
           ]
+        },
+        {
+          orderNumber: '12345678911',
+          shippingNumber: '8888888888',
+          createDate: '2019-05-12',
+          amount: 680,
+          status: 3, // 与ordersMenu 里面的id 对应
+          products: [
+            {
+              img: '/static/images/bag/product.png',
+              name: 'PRODUCT NAME BALABALABALABALABALA BALABALA',
+              count: 1,
+              price: 30.01,
+              id: '0005'
+            },
+            {
+              img: '/static/images/bag/product.png',
+              name: 'PRODUCT NAME BALABALABALABALABALA BALABALA',
+              count: 2,
+              price: 33.00,
+              id: '0006'
+            },
+            {
+              img: '/static/images/bag/product.png',
+              name: 'PRODUCT NAME BALABALABALABALABALA BALABALA',
+              count: 2,
+              price: 33.00,
+              id: '0007'
+            }
+          ]
         }
       ]
     }
@@ -131,6 +161,7 @@ export default {
     }
   }
   .orderDetail {
+    margin-top: 15px;
     box-sizing: border-box;
     border-bottom: 1px solid #e7e7e7;
     border-right: 1px solid #e7e7e7;
@@ -173,6 +204,29 @@ export default {
           border-top: none;
           > p {
             display: none;
+          }
+        }
+        .status {
+          display: flex;
+          flex-direction: column;
+           justify-content: center;
+          > p {
+            padding: 8px 0;
+            text-align: center;
+            >span {
+              color: #a8a8a8;
+            }
+          }
+          .istopay {
+            color: #bfa17a;
+          }
+          .det {
+            cursor: pointer;
+            text-align: center;
+            &:hover {
+              text-decoration: underline;
+              color: #a8a8a8;
+            }
           }
         }
         .detail {
