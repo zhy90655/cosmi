@@ -2,7 +2,12 @@
   <div class="order-wrap" style="width:830px">
     <div class="shipping">
       <ul class="tabs">
-        <li v-for="item in ordersMenu" :key="item.id" :class="{active:activeIndex === item.id}" @click="activeIndex = item.id">{{item.type}}</li>
+        <li
+          v-for="item in ordersMenu"
+          :key="item.id"
+          :class="{active:activeIndex === item.id}"
+          @click="activeIndex = item.id"
+        >{{item.type}}</li>
       </ul>
       <ul class="orderTitle">
         <li v-for="(item,index) in titleList" :key="index">{{item}}</li>
@@ -63,13 +68,23 @@ export default {
               name: 'PRODUCT NAME BALABALABALABALABALA BALABALA',
               count: 1,
               price: 30.01,
+              color: '#f00',
+              id: '0005'
+            },
+            {
+              img: '/static/images/bag/product.png',
+              name: 'PRODUCT NAME BALABALABALABALABALA BALABALA',
+              count: 1,
+              price: 30.01,
+              color: '#f00',
               id: '0005'
             },
             {
               img: '/static/images/bag/product.png',
               name: 'PRODUCT NAME BALABALABALABALABALA BALABALA',
               count: 2,
-              price: 33.00,
+              price: 33.0,
+              color: '#f00',
               id: '0006'
             }
           ]
@@ -107,7 +122,9 @@ export default {
       ]
     }
   },
-  created () {
+  created () {},
+  methods: {
+
   }
 }
 </script>
@@ -134,7 +151,7 @@ export default {
     font-size: 14px;
     margin-bottom: 9px;
     background-color: #f6f6f6;
-    >li {
+    > li {
       text-align: center;
       width: 138px;
       line-height: 40px;
@@ -157,11 +174,11 @@ export default {
       padding-right: 20px;
       border-left: 1px solid #e7e7e7;
       border-top: 1px solid #e7e7e7;
-      >li:first-child {
+      > li:first-child {
         text-align: center;
         width: 138px;
       }
-      >li:nth-child(2) {
+      > li:nth-child(2) {
         flex-grow: 1;
       }
       img {
@@ -172,18 +189,20 @@ export default {
       .product {
         height: 138px;
         display: flex;
-        >li {
+        > li {
           width: 138px;
           border-left: 1px solid #e7e7e7;
           border-top: 1px solid #e7e7e7;
-          &.total, &.qty {
+          &.total,
+          &.qty {
             line-height: 138px;
             text-align: center;
           }
         }
-        &.otehrLine .total, &.otehrLine .status {
+        &.otehrLine .total,
+        &.otehrLine .status {
           border-top: none;
-          >p {
+          > p {
             display: none;
           }
         }
@@ -214,8 +233,8 @@ export default {
           padding-left: 10px;
           flex-grow: 1;
           display: flex;
-          align-items:center;
-          >div {
+          align-items: center;
+          > div {
             margin-left: 10px;
           }
         }
