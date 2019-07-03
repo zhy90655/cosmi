@@ -16,23 +16,36 @@
         <ul class="head">
           <li>{{order.createDate}}</li>
           <li>Order Number:{{order.orderNumber}}</li>
-          <li><img src="../../assets/images/person/trashcan.png"/></li>
+          <li>
+            <img src="../../assets/images/person/trashcan.png" />
+          </li>
         </ul>
         <div class="body">
-          <ul v-for="(product, index) in order.products" :key="index" :class="[index === 0 ? 'product' : 'product otehrLine']">
+          <ul
+            v-for="(product, index) in order.products"
+            :key="index"
+            :class="[index === 0 ? 'product' : 'product otehrLine']"
+          >
             <li class="detail">
-              <img :src="product.img" alt="">
+              <img :src="product.img" alt />
               <div>
                 <p>{{product.name}}</p>
                 <span>${{product.price}}</span>
               </div>
             </li>
             <li class="qty">x{{product.count}}</li>
-            <li class="total"><p>${{order.amount}}</p></li>
+            <li class="total">
+              <p>${{order.amount}}</p>
+            </li>
             <li class="status">
-              <p :class="{istopay: order.status === 1}">{{ordersMenu.find(_ => _.id === order.status).type}}</p>
+              <p
+                :class="{istopay: order.status === 1}"
+              >{{ordersMenu.find(_ => _.id === order.status).type}}</p>
               <p v-if="order.status !== 1" class="det">Order Details</p>
-              <p>Shipping Number <span>{{order.shippingNumber}}</span></p>
+              <p>
+                Shipping Number
+                <span>{{order.shippingNumber}}</span>
+              </p>
             </li>
           </ul>
         </div>
@@ -107,14 +120,14 @@ export default {
               img: '/static/images/bag/product.png',
               name: 'PRODUCT NAME BALABALABALABALABALA BALABALA',
               count: 2,
-              price: 33.00,
+              price: 33.0,
               id: '0006'
             },
             {
               img: '/static/images/bag/product.png',
               name: 'PRODUCT NAME BALABALABALABALABALA BALABALA',
               count: 2,
-              price: 33.00,
+              price: 33.0,
               id: '0007'
             }
           ]
@@ -123,9 +136,7 @@ export default {
     }
   },
   created () {},
-  methods: {
-
-  }
+  methods: {}
 }
 </script>
 <style lang="less" scoped>
@@ -209,16 +220,17 @@ export default {
         .status {
           display: flex;
           flex-direction: column;
-           justify-content: center;
+          justify-content: center;
+          cursor: pointer;
           > p {
             padding: 8px 0;
             text-align: center;
-            >span {
-              color: #a8a8a8;
+            > span {
+              color: #151515;
             }
           }
           .istopay {
-            color: #bfa17a;
+            color: #151515;
           }
           .det {
             cursor: pointer;
