@@ -38,9 +38,14 @@
               <p>${{order.amount}}</p>
             </li>
             <li class="status">
-              <p :class="{istopay: order.status === 1}">{{ordersMenu.find(_ => _.id === order.status).type}}</p>
+              <p
+                :class="{istopay: order.status === 1}"
+              >{{ordersMenu.find(_ => _.id === order.status).type}}</p>
               <p class="det">Order Details</p>
-              <p v-if="order.status !== 1" >Shipping Number <span>{{order.shippingNumber}}</span></p>
+              <p v-if="order.status !== 1">
+                Shipping Number
+                <span>{{order.shippingNumber}}</span>
+              </p>
             </li>
           </ul>
         </div>
@@ -66,7 +71,7 @@ export default {
       orderList: [
         {
           orderNumber: '12345678910',
-          shippingNumber: '',
+          shippingNumber: '12345678910',
           createDate: '2019-05-10',
           amount: 230,
           status: 1, // 与ordersMenu 里面的id 对应
@@ -222,10 +227,16 @@ export default {
             text-align: center;
             > span {
               color: #151515;
+              &:hover {
+                color: #b78a59;
+              }
             }
           }
           .istopay {
             color: #151515;
+            &:hover {
+              color: #b78a59;
+            }
           }
           .det {
             cursor: pointer;
