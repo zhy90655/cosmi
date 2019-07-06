@@ -17,7 +17,7 @@
         ></el-autocomplete>
       </div>
       <div class="content">
-        products -- {{nav.slice(-1)[0].title}}
+        <!-- products -- {{nav.slice(-1)[0].title}} -->
         <component :is="componentLsit[nav.length - 1]"></component>
       </div>
     </div>

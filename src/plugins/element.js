@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import { Autocomplete, Badge, Row, Col, Button, Popover, InputNumber, Form, FormItem, Input, Pagination,
   Dialog, Checkbox, Container, Aside, Main, Breadcrumb, BreadcrumbItem, Table, TableColumn, Select, MessageBox,
-  Message, Option, DatePicker, TimePicker, Switch, CheckboxGroup, Radio, RadioGroup, Menu, MenuItem
+  Message, Option, DatePicker, TimePicker, Switch, CheckboxGroup, Radio, RadioGroup, Menu, MenuItem, Slider
 } from 'element-ui'
 
 Vue.use(Autocomplete)
@@ -34,6 +34,7 @@ Vue.use(Radio)
 Vue.use(RadioGroup)
 Vue.use(Menu)
 Vue.use(MenuItem)
+Vue.use(Slider)
 
 Vue.prototype.$msgbox = MessageBox
 Vue.prototype.$message = Message
