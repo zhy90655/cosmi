@@ -58,7 +58,7 @@
         <el-input  type="password" v-model="pwd.newPwd"></el-input>
       </el-form-item>
       <el-form-item label="Repeat New Password" prop="password">
-        <el-input  type="password" v-model.number="pwd.password"></el-input>
+        <el-input  type="password" v-model="pwd.password"></el-input>
       </el-form-item>
       <el-form-item class="submit-pwd">
         <el-button type="primary" @click="onSubmitPwd">SAVE</el-button>
@@ -82,10 +82,9 @@ export default {
       }
     }
     var validatePass2 = (rule, value, callback) => {
-      // console.log('校验', typeof (value), typeof (this.pwd.newPwd), value === this.pwd.newPwd)
       if (value === '') {
         callback(new Error('请再次输入密码'))
-      } else if (value !== +this.pwd.newPwd) {
+      } else if (value !== this.pwd.newPwd) {
         callback(new Error('两次输入密码不一致!'))
       } else {
         callback()
