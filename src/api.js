@@ -16,6 +16,15 @@ export function isEmailRegister (data) {
   })
 }
 
+// 发送邮件
+export function sendEmail (data) {
+  return service({
+    url: 'mall/login/findUserIsRegister',
+    method: 'get',
+    data
+  })
+}
+
 // 登录接口
 export function login (data) {
   return service({
