@@ -41,10 +41,7 @@
       <section class="typeGoods rightContainer">
         <div class="title">MATCHING PRODUCT</div>
         <ul class="list">
-          <ProductList
-          :hots=hots
-          isDetail
-          />
+          <ProductList :hots="hots" isDetail />
         </ul>
       </section>
     </div>
@@ -235,18 +232,13 @@ export default {
           ]
         }
       ]
-
     }
   },
 
   methods: {
-    addToCart () {
+    addToCart () {},
 
-    },
-
-    buy () {
-
-    }
+    buy () {}
   },
   mounted () {},
 
@@ -351,15 +343,14 @@ export default {
     .typeGoods {
       margin: 20px 0;
       padding-top: 0;
-      border-bottom: 1px solid #000;
       .title {
         width: 100%;
         height: 40px;
         line-height: 40px;
         font-size: 1.6em;
         font-weight: 600;
+        border-bottom: 1px solid #000;
       }
-
     }
   }
 }
