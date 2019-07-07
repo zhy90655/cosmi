@@ -134,6 +134,7 @@ export default {
         console.log('logout')
         this.setLogin(false)
         this.setShowLogin(false)
+        this.$router.push('/')
       }
     },
     productDetail (id) {
