@@ -19,7 +19,16 @@ export function isEmailRegister (data) {
 // 发送邮件
 export function sendEmail (data) {
   return service({
-    url: 'mall/login/findUserIsRegister',
+    url: '/mail/send',
+    method: 'post',
+    data
+  })
+}
+
+// banner轮播图
+export function banner (data) {
+  return service({
+    url: '/banner/getBannerList/page/1/5',
     method: 'get',
     data
   })

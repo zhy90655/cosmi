@@ -5,69 +5,6 @@
     </section>
     <div class="hot">
       <h3 class="title">BEST SELLER</h3>
-      <!-- <div class="main">
-        <div
-          class="list"
-          @touchstart="touchstart($event, 'h')"
-          @touchmove="touchmove($event, 'h')"
-          @touchend="touchend($event, 'h', hots.length-1)"
-        >
-          <el-row :gutter="20" ref="hul">
-            <el-col
-              :lg="8"
-              :xl="8"
-              :md="8"
-              :sm="12"
-              :xm="24"
-              v-for="(pro, index) in hots"
-              :key="index"
-            >
-              <div class="item">
-                <div class="img" @click="productDetail(pro.id)">
-                  <img :src="(pro.colors[pro.hoverIndex] || pro.colors[pro.activeIndex]).img" />
-                </div>
-                <div class="name" @click="productDetail(pro.id)">
-                  <p>{{(pro.colors[pro.hoverIndex] || pro.colors[pro.activeIndex]).name}}</p>
-                </div>
-                <div
-                  class="color"
-                  v-if="pro.colors.length > 1"
-                >{{(pro.colors[pro.hoverIndex] || pro.colors[pro.activeIndex]).code}}</div>
-                <div class="colorPicker" v-if="pro.colors.length > 1">
-                  <i
-                    :class="['el-icon-arrow-left',pro.activeIndex === 0 ? 'disabled' : '' ]"
-                    :style="{visibility: pro.colors.length > 5 ? '' : 'hidden'}"
-                    @click="pre(pro)"
-                  ></i>
-                  <ul class="dot">
-                    <li
-                      v-for="(item, ind) in pro.colors"
-                      :key="ind"
-                      :style="{backgroundColor: item.color, transform:'translateX(-'+ (160 * (pro.activeIndex > 4 ? pro.activeIndex - 4 : 0))+'%)'}"
-                      :class="{active: ind === pro.activeIndex || ind === pro.hoverIndex}"
-                      @click="pro.activeIndex = ind"
-                      @mouseenter="pro.hoverIndex = ind"
-                      @mouseleave="pro.hoverIndex = -1"
-                    ></li>
-                  </ul>
-                  <i
-                    :class="['el-icon-arrow-right',pro.activeIndex === pro.colors.length - 1 ? 'disabled' : '' ]"
-                    :style="{visibility: pro.colors.length > 5 ? '' : 'hidden'}"
-                    @click="next(pro)"
-                  ></i>
-                </div>
-                <div v-else class="new">
-                  <p>NEW</p>
-                </div>
-                <div
-                  class="price"
-                >${{(pro.colors[pro.hoverIndex] || pro.colors[pro.activeIndex]).price}}</div>
-                <el-button class="add">ADD TO BAG</el-button>
-              </div>
-            </el-col>
-          </el-row>
-        </div>
-      </div> -->
       <ProductList :hots="hots"></ProductList>
     </div>
     <section class="prodotti">
@@ -182,6 +119,7 @@
 
 <script>
 import { mapState } from 'vuex'
+import { banner } from '../api'
 import ProductList from '../components/product/productList'
 export default {
   data () {
@@ -414,6 +352,9 @@ export default {
         this.$store.commit('setDialogVisible', val)
       }
     }
+  },
+  created () {
+    banner()
   },
   methods: {
     productDetail (id) {

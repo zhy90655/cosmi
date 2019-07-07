@@ -148,8 +148,13 @@ export default {
       console.log(item)
     },
     Detai (item) {
-      if (!item) return this.$refs.detail.classList.remove('show')
-      this.$refs.detail.classList.add('show')
+      if (!item) {
+        return this.$refs.detail.classList.remove('show')
+      } else if (item === 'MAKEUP') {
+        this.$refs.detail.classList.add('show')
+      } else if (item === 'HOME') {
+        this.$router.push('/')
+      }
     }
   }
 }
