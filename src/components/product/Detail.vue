@@ -41,14 +41,10 @@
       <section class="typeGoods rightContainer">
         <div class="title">MATCHING PRODUCT</div>
         <ul class="list">
-          <!-- <GoodsItem
-            v-for="(item,index) in filterList"
-            :key="+item.id"
-            :id="item.id"
-            :img="item.img"
-            :name="item.name"
-            :price="item.price"
-          />-->
+          <ProductList
+          :hots=hots
+          isDetail
+          />
         </ul>
       </section>
     </div>
@@ -56,11 +52,12 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
-
+import ProductList from './productList'
 export default {
   name: 'GoodsDetail',
-  components: {},
+  components: {
+    ProductList
+  },
   computed: {
     id () {
       return this.$route.params.id
@@ -95,51 +92,160 @@ export default {
         '#333',
         '#888'
       ],
-      num: 1
+      num: 1,
+      hots: [
+        {
+          hoverIndex: -1,
+          activeIndex: 0,
+          id: '0002',
+          colors: [
+            {
+              code: '132#',
+              color: 'rgb(239, 207, 175)',
+              price: 126,
+              img: '/static/images/main/product2.png',
+              name: 'PRODUCT NAME SECOND LINE'
+            },
+            {
+              code: '192#',
+              color: 'rgb(229, 188, 146)',
+              price: 162,
+              img: '/static/images/main/product1.png',
+              name: 'PRODUCT NAME'
+            },
+            {
+              code: '178#',
+              color: 'rgb(214, 160, 117)',
+              price: 127,
+              img: '/static/images/main/product3.png',
+              name: 'PRODUCT NAME SECOND LINE'
+            },
+            {
+              code: '180#',
+              color: 'rgb(215, 167, 112)',
+              price: 163,
+              img: '/static/images/main/product1.png',
+              name: 'PRODUCT NAME'
+            },
+            {
+              code: '290#',
+              color: 'rgb(222, 190, 151)',
+              price: 126,
+              img: '/static/images/main/product3.png',
+              name: 'PRODUCT NAME'
+            },
+            {
+              code: '422#',
+              color: 'rgb(234, 196, 159)',
+              price: 146,
+              img: '/static/images/main/product1.png',
+              name: 'PRODUCT NAME SECOND LINE'
+            },
+            {
+              code: '105#',
+              color: 'rgb(232, 188, 164)',
+              price: 126,
+              img: '/static/images/main/product2.png',
+              name: 'PRODUCT NAME'
+            },
+            {
+              code: '181#',
+              color: 'rgb(236, 195, 161)',
+              price: 166,
+              img: '/static/images/main/product1.png',
+              name: 'PRODUCT NAME'
+            },
+            {
+              code: '272#',
+              color: 'rgb(226, 185, 150)',
+              price: 167,
+              img: '/static/images/main/product2.png',
+              name: 'PRODUCT NAME SECOND LINE'
+            },
+            {
+              code: '374#',
+              color: 'rgb(210, 158, 123)',
+              price: 168,
+              img: '/static/images/main/product3.png',
+              name: 'PRODUCT NAME SECOND LINE'
+            }
+          ]
+        },
+        {
+          hoverIndex: -1,
+          activeIndex: 0,
+          id: '0003',
+          colors: [
+            {
+              code: '132#',
+              color: 'rgb(239, 207, 175)',
+              price: 136,
+              img: '/static/images/main/product1.png',
+              name: 'PRODUCT NAME'
+            },
+            {
+              code: '192#',
+              color: 'rgb(229, 188, 146)',
+              price: 162,
+              img: '/static/images/main/product2.png',
+              name: 'PRODUCT NAME'
+            },
+            {
+              code: '178#',
+              color: 'rgb(214, 160, 117)',
+              price: 126,
+              img: '/static/images/main/product3.png',
+              name: 'PRODUCT NAME SECOND LINE'
+            },
+            {
+              code: '180#',
+              color: 'rgb(215, 167, 112)',
+              price: 163,
+              img: '/static/images/main/product1.png',
+              name: 'PRODUCT NAME'
+            }
+          ]
+        },
+        {
+          hoverIndex: -1,
+          activeIndex: 0,
+          id: '0004',
+          colors: [
+            {
+              code: '132#',
+              color: 'rgb(239, 207, 175)',
+              price: 188,
+              img: '/static/images/main/product3.png',
+              name: 'PRODUCT NAME SECOND LINE'
+            }
+          ]
+        },
+        {
+          hoverIndex: -1,
+          activeIndex: 0,
+          id: '0004',
+          colors: [
+            {
+              code: '132#',
+              color: 'rgb(239, 207, 175)',
+              price: 188,
+              img: '/static/images/main/product3.png',
+              name: 'PRODUCT NAME SECOND LINE'
+            }
+          ]
+        }
+      ]
+
     }
   },
 
   methods: {
     addToCart () {
-      if (!this.clientToken) {
-        alert('请先登录！')
-        return
-      }
-      const res = addOrder({
-        token: this.clientToken,
-        goodsDetailId: this.temSpecId,
-        state: 0,
-        num: this.num,
-        amount: this.goodsPrice
-      })
-      res
-        .then(() => {
-          alert('加入购物车成功！请前往 个人中心->购物车 结算')
-        })
-        .catch(e => {
-          alert(e)
-        })
+
     },
 
     buy () {
-      if (!this.clientToken) {
-        alert('请先登录！')
-        return
-      }
-      const res = addOrder({
-        token: this.clientToken,
-        goodsDetailId: this.temSpecId,
-        num: this.num,
-        state: 1,
-        amount: this.goodsPrice
-      })
-      res
-        .then(() => {
-          alert('自动付款成功！请耐心等待包裹派送~')
-        })
-        .catch(e => {
-          alert(e)
-        })
+
     }
   },
   mounted () {},
