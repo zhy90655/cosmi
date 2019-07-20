@@ -76,19 +76,17 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(['setLogin', 'setShowLogin']),
+    ...mapMutations(['setLogin']),
     submitForm (formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
           if (!this.showConfirm) {
             login(this.ruleForm).then(() => {
               this.setLogin(true)
-              this.setShowLogin(false)
             })
           } else {
             register(this.ruleForm).then(() => {
               this.setLogin(true)
-              this.setShowLogin(false)
             })
           }
         } else {

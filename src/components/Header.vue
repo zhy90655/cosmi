@@ -23,18 +23,16 @@
           </el-badge>
         </el-popover>
         <el-popover
-          :width="centerPopoverInfo.width"
-          :offset='centerPopoverInfo.offset'
+          :width="146"
           popper-class='head pop-center'
-          v-model="showCenter"
+          :disabled="!isLogin"
           trigger="hover">
-          <login v-if="!isLogin"></login>
-          <ul class="personal" v-else>
+          <ul class="personal">
             <li v-for="(item, index) in setList" :key="index" @click="handelCenterClick(item.params)">{{item.title}}</li>
           </ul>
-          <i class="center" slot="reference">
+          <router-link to='/login' class="center" slot="reference">
             <img src="../assets/images/header/center.png">
-          </i>
+          </router-link>
         </el-popover>
         <i class="it">
           <img src="../assets/images/header/IT.png">
@@ -72,12 +70,12 @@
 
 <script>
 import ShoppingBag from './ShoppingBag'
-import Login from './Login'
+// import Login from './Login'
 import { mapState, mapMutations } from 'vuex'
 export default {
   components: {
-    ShoppingBag,
-    Login
+    ShoppingBag
+    // Login
   },
   data () {
     return {
@@ -99,26 +97,15 @@ export default {
     }
   },
   computed: {
-    ...mapState(['cartlist', 'isLogin', 'showLogin', 'productList']),
+    ...mapState(['cartlist', 'isLogin', 'productList']),
     carCount () {
       let count = 0
       this.cartlist.forEach(_ => (count += _.count))
       return count
-    },
-    centerPopoverInfo () {
-      return this.isLogin ? { width: 146, offset: 0 } : { width: 366, offset: -98 }
-    },
-    showCenter: {
-      get () {
-        return this.showLogin
-      },
-      set (value) {
-        this.setShowLogin(value)
-      }
     }
   },
   methods: {
-    ...mapMutations(['setLogin', 'setShowLogin']),
+    ...mapMutations(['setLogin']),
     querySearchAsync (queryString, cb) {
       const data = [
         { 'value': '(小杨生煎)西郊百联餐厅', 'address': '长宁区仙霞西路88号百联2楼' },
@@ -133,7 +120,6 @@ export default {
       else {
         console.log('logout')
         this.setLogin(false)
-        this.setShowLogin(false)
         this.$router.push('/')
       }
     },
@@ -182,6 +168,7 @@ export default {
       }
       .center {
         margin-left: 20px;
+        cursor: pointer;
       }
       img{
         transform: translateY(5px)

@@ -40,7 +40,6 @@ export default new Vuex.Store({
     }
     ],
     isLogin: false,
-    showLogin: false,
     dialogVisible: true,
     productList: [{
       id: '0001',
@@ -82,9 +81,6 @@ export default new Vuex.Store({
     },
     setLogin (state, n) {
       state.isLogin = n
-    },
-    setShowLogin (state, n) {
-      state.showLogin = n
     },
     setDialogVisible (state, n) {
       state.dialogVisible = n
